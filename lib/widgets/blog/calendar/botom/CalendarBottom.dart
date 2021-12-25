@@ -18,16 +18,7 @@ class CalendarBototm extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             DiaSemana(),
-            Container(
-              decoration: BoxDecoration(
-                color: blue,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20),
-                ),
-              ),
-              child: DiasDeLaSemana(),
-            ),
+            DiasDeLaSemana(),
           ],
         ),
       ),
