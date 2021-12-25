@@ -1,6 +1,5 @@
 import 'package:blog/widgets/blog/calendar/Ligas.dart';
 import 'package:blog/widgets/blog/calendar/botom/CalendarBottom.dart';
-import 'package:blog/widgets/blog/calendar/botom/SiguientesMeses.dart';
 import 'package:blog/widgets/blog/calendar/top/CalendarTop.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +17,6 @@ class Calendar extends StatelessWidget {
             CalendarTop(),
             CalendarBototm(),
             Ligas(),
-            SiguientesMeses(),
           ],
         ),
       ),

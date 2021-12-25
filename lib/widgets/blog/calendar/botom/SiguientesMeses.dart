@@ -8,26 +8,24 @@ class SiguientesMeses extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     return Positioned(
-      top: 350,
+      bottom: -20,
       child: Container(
-        width: width,
-        // color: Colors.amber,
+        width: width - width * 0.3,
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               "Noviembre",
               style: TextStyle(
                 color: blue,
-                fontSize: 12,
+                fontSize: 13,
               ),
             ),
             Text(
               "Enero",
               style: TextStyle(
                 color: blue,
-                fontSize: 12,
+                fontSize: 13,
               ),
             ),
           ],
