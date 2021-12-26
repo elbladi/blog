@@ -6,7 +6,11 @@ import 'options/OptionBubble.dart';
 
 class FloatingButton extends StatefulWidget {
   final Function onPress;
-  const FloatingButton(this.onPress, {Key? key}) : super(key: key);
+  final bool isOpened;
+  final Function setIsOpened;
+  const FloatingButton(this.onPress, this.isOpened, this.setIsOpened,
+      {Key? key})
+      : super(key: key);
 
   @override
   _FloatingButtonState createState() => _FloatingButtonState();
@@ -26,6 +30,9 @@ class _FloatingButtonState extends State<FloatingButton> {
       colorStartAnimation: blue,
       colorEndAnimation: blue,
       animatedIconData: AnimatedIcons.add_event,
+      isOpened: widget.isOpened,
+      setIsOpened: (bool val, Function closeThis) =>
+          widget.setIsOpened(val, closeThis),
     );
   }
 }

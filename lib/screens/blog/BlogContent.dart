@@ -1,6 +1,8 @@
 import 'package:blog/constants.dart';
 import 'package:blog/models/FloatingOption.dart';
 import 'package:blog/widgets/blog/calendar/Calendar.dart';
+import 'package:blog/widgets/blog/text/ContentText.dart';
+import 'package:blog/widgets/blog/title/DayTitle.dart';
 import 'package:blog/widgets/floatingButtons/FloatingButton.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +14,9 @@ class BlogContent extends StatefulWidget {
 }
 
 class BlogContentState extends State<BlogContent> {
-  bool show = true;
+  bool showCalendar = false;
+  bool showOptions = false;
+  Function? closeThis;
 
   @override
   void initState() {
@@ -21,7 +25,7 @@ class BlogContentState extends State<BlogContent> {
 
   void _toggleCalendar() {
     this.setState(() {
-      show = !show;
+      showCalendar = !showCalendar;
     });
   }
 
@@ -35,11 +39,26 @@ class BlogContentState extends State<BlogContent> {
     }
   }
 
+  void _setIsOpened(bool val, Function closeThisShit) {
+    this.setState(() {
+      showOptions = val;
+      closeThis = closeThisShit;
+    });
+  }
+
+  Function? _closeOptions() {
+    if (showOptions && closeThis != null) {
+      closeThis!();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+    final size = MediaQuery.of(context).size;
+    final width = size.width;
     return Scaffold(
-      floatingActionButton: FloatingButton(_selectOption),
+      floatingActionButton:
+          FloatingButton(_selectOption, showOptions, _setIsOpened),
       body: Container(
         color: green,
         height: double.infinity,
@@ -47,11 +66,22 @@ class BlogContentState extends State<BlogContent> {
         child: Stack(
           children: [
             AnimatedPositioned(
-              // top: show ? -800 : 0, //this line is the chida
-              top: !show ? -800 : 0,
+              top: showCalendar ? 0 : -800,
               child: Calendar(),
               curve: Curves.easeInOut,
               duration: Duration(seconds: 1),
+            ),
+            AnimatedPositioned(
+              top: showCalendar ? 420 : 80,
+              child: DayTitle(() => _selectOption(OptionName.Calendar)),
+              curve: Curves.easeInOut,
+              duration: Duration(milliseconds: 800),
+            ),
+            AnimatedPositioned(
+              top: showCalendar ? 470 : 140,
+              child: ContentText(_closeOptions),
+              curve: Curves.easeInOut,
+              duration: Duration(milliseconds: 800),
             ),
           ],
         ),
