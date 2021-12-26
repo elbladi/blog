@@ -21,6 +21,7 @@ class DayTitle extends StatelessWidget {
                 style: TextStyle(
                   color: blue,
                   fontSize: 27,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
