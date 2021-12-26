@@ -21,6 +21,7 @@ class BlogContentState extends State<BlogContent> {
   bool showCalendar = false;
   bool showOptions = false;
   bool editionMode = false;
+  bool favorite = false;
   Function? closeThis;
   late TextEditingController controller;
 
@@ -72,30 +73,18 @@ class BlogContentState extends State<BlogContent> {
         editionMode = false;
       });
     }
-    // if (type == DismissType.BTN_OK) {
-    //   if (title == "Cancelar") {
-    //     this.setState(() {
-    //       editionMode = false;
-    //       controller.text = texto;
-    //     });
-    //   } else {
-    //     print(controller.text);
-    //     this.setState(() {
-    //       editionMode = false;
-    //     });
-    //   }
-    // }
   }
 
   void _selectOption(OptionName id) {
-    _closeOptions();
     switch (id) {
       case OptionName.Calendar:
+        _closeOptions();
         this.setState(() {
           showCalendar = !showCalendar;
         });
         break;
       case OptionName.Edit:
+        _closeOptions();
         if (editionMode) {
           _showDialog(
             'Publicar',
@@ -110,12 +99,23 @@ class BlogContentState extends State<BlogContent> {
         }
         break;
       case OptionName.Cancel:
+        _closeOptions();
         _showDialog(
           'Cancelar',
           '¿Cancelar tus cambios? Esta accion no se puede revertir',
           DialogType.WARNING,
           cancelTxt: 'Salir',
         );
+        break;
+      case OptionName.NoFavorite:
+        this.setState(() {
+          favorite = true;
+        });
+        break;
+      case OptionName.Favorite:
+        this.setState(() {
+          favorite = false;
+        });
         break;
       default:
         break;
@@ -140,8 +140,13 @@ class BlogContentState extends State<BlogContent> {
     final size = MediaQuery.of(context).size;
     final width = size.width;
     return Scaffold(
-      floatingActionButton:
-          FloatingButton(_selectOption, showOptions, _setIsOpened, editionMode),
+      floatingActionButton: FloatingButton(
+        _selectOption,
+        showOptions,
+        _setIsOpened,
+        editionMode,
+        favorite,
+      ),
       body: Container(
         color: green,
         height: double.infinity,

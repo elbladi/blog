@@ -10,8 +10,9 @@ class FloatingButton extends StatefulWidget {
   final bool isOpened;
   final Function setIsOpened;
   final bool editionMode;
-  const FloatingButton(
-      this.onPress, this.isOpened, this.setIsOpened, this.editionMode,
+  final bool favorite;
+  const FloatingButton(this.onPress, this.isOpened, this.setIsOpened,
+      this.editionMode, this.favorite,
       {Key? key})
       : super(key: key);
 
@@ -31,6 +32,15 @@ class _FloatingButtonState extends State<FloatingButton> {
           id = OptionName.Cancel;
         }
       }
+      if (id == OptionName.NoFavorite && widget.favorite) {
+        id = OptionName.Favorite;
+        icon = Icons.favorite;
+      }
+      if (id == OptionName.Favorite && !widget.favorite) {
+        id = OptionName.NoFavorite;
+        icon = Icons.favorite_border;
+      }
+
       return OptionBubble(() => widget.onPress(id), icon);
     });
   }
