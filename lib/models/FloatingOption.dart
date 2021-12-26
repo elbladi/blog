@@ -6,6 +6,7 @@ enum OptionName {
   NoFavorite,
   Edit,
   Delete,
+  Cancel,
 }
 
 class FloatingOption {

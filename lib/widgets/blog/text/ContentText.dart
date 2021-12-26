@@ -1,11 +1,23 @@
 import 'package:flutter/material.dart';
 
-const texto =
-    "Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum";
-
-class ContentText extends StatelessWidget {
+class ContentText extends StatefulWidget {
   final Function closeOptions;
-  const ContentText(this.closeOptions, {Key? key}) : super(key: key);
+  final bool editionMode;
+  final TextEditingController controller;
+
+  ContentText(
+      {required this.controller,
+      required this.closeOptions,
+      required this.editionMode,
+      Key? key})
+      : super(key: key);
+
+  @override
+  _ContentTextState createState() => _ContentTextState();
+}
+
+class _ContentTextState extends State<ContentText> {
+  TextStyle get _textStyle => TextStyle(fontSize: 17, fontFamily: "Montserrat");
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +25,7 @@ class ContentText extends StatelessWidget {
     final width = size.width;
     final height = size.height;
     return GestureDetector(
-      onTap: () => closeOptions(),
+      onTap: () => widget.closeOptions(),
       child: Container(
         width: width,
         height: height - height * 0.2,
@@ -24,10 +36,20 @@ class ContentText extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    Text(
-                      texto,
-                      style: TextStyle(fontSize: 17, fontFamily: "Montserrat"),
-                    ),
+                    widget.editionMode
+                        ? TextFormField(
+                            style: _textStyle,
+                            textCapitalization: TextCapitalization.sentences,
+                            maxLines: null,
+                            decoration: const InputDecoration(
+                              enabledBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                            ),
+                            controller: widget.controller,
+                            // initialValue: widget.controller.text,
+                          )
+                        : Text(widget.controller.text, style: _textStyle),
                     Container(
                       height: 100,
                       width: 40,
