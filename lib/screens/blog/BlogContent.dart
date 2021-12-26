@@ -158,7 +158,6 @@ class BlogContentState extends State<BlogContent> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final width = size.width;
-    final height = size.height;
     return Scaffold(
       floatingActionButton: FloatingButton(
         _selectOption,

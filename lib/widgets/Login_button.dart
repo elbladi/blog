@@ -39,6 +39,7 @@ class _LoginButtonState extends State<LoginButton> {
       child: Padding(
         padding: EdgeInsets.only(top: 20, left: 100),
         child: TextField(
+          style: TextStyle(color: white),
           decoration: const InputDecoration(
             enabledBorder: InputBorder.none,
             disabledBorder: InputBorder.none,
