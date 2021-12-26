@@ -22,6 +22,7 @@ class BlogContentState extends State<BlogContent> {
   bool showOptions = false;
   bool editionMode = false;
   bool favorite = false;
+  bool exist = true;
   Function? closeThis;
   late TextEditingController controller;
 
@@ -117,6 +118,14 @@ class BlogContentState extends State<BlogContent> {
           favorite = false;
         });
         break;
+      case OptionName.Delete:
+        if (exist) {
+          this.setState(() {
+            exist = false;
+          });
+        }
+        _closeOptions();
+        break;
       default:
         break;
     }
@@ -135,10 +144,21 @@ class BlogContentState extends State<BlogContent> {
     }
   }
 
+  void _crearNuevo() {
+    this.setState(() {
+      showCalendar = false;
+      showOptions = false;
+      favorite = false;
+      exist = true;
+      controller.text = "What's on your mind?";
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final width = size.width;
+    final height = size.height;
     return Scaffold(
       floatingActionButton: FloatingButton(
         _selectOption,
@@ -167,11 +187,23 @@ class BlogContentState extends State<BlogContent> {
             ),
             AnimatedPositioned(
               top: showCalendar ? 470 : 140,
-              child: ContentText(
-                closeOptions: _closeOptions,
-                editionMode: editionMode,
-                controller: controller,
-              ),
+              width: !showCalendar ? width : width - 100,
+              left: showCalendar ? 30 : 0,
+              child: exist
+                  ? ContentText(
+                      closeOptions: _closeOptions,
+                      editionMode: editionMode,
+                      controller: controller,
+                    )
+                  : Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: GestureDetector(
+                        onTap: _crearNuevo,
+                        child: Image(
+                          image: AssetImage('assets/emptines.gif'),
+                        ),
+                      ),
+                    ),
               curve: Curves.easeInOut,
               duration: Duration(milliseconds: 800),
             ),
