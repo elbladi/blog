@@ -8,7 +8,7 @@ class CalendarTop extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     return Container(
-      width: double.infinity,
+      padding: EdgeInsets.symmetric(horizontal: 50),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

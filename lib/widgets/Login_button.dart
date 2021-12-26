@@ -2,7 +2,6 @@ import 'package:blog/constants.dart';
 import 'package:blog/widgets/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:blog/constants.dart';
 
 class LoginButton extends StatefulWidget {
   final String text;
