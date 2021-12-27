@@ -117,6 +117,7 @@ class BlogContentState extends State<BlogContent> {
           } else {
             this.setState(() {
               editionMode = true;
+              uneditedText = controller.text;
             });
           }
         } else {
@@ -151,6 +152,7 @@ class BlogContentState extends State<BlogContent> {
           this.setState(() {
             selectedDay.exist = false;
             selectedDay.memory = null;
+            controller.text = "";
           });
         }
         _closeOptions();
