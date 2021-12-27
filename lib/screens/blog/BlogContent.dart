@@ -23,6 +23,7 @@ class BlogContentState extends State<BlogContent> {
   bool editionMode = false;
   bool favorite = false;
   bool exist = true;
+  int day = 15;
   Function? closeThis;
   late TextEditingController controller;
 
@@ -154,6 +155,12 @@ class BlogContentState extends State<BlogContent> {
     });
   }
 
+  void _setDay(int selectedDay) {
+    this.setState(() {
+      day = selectedDay;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -174,7 +181,7 @@ class BlogContentState extends State<BlogContent> {
           children: [
             AnimatedPositioned(
               top: showCalendar ? 0 : -800,
-              child: Calendar(),
+              child: Calendar(day, _setDay, favorite),
               curve: Curves.easeInOut,
               duration: Duration(seconds: 1),
             ),

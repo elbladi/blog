@@ -16,6 +16,10 @@ Color get red {
   return const Color.fromRGBO(146, 55, 77, 1);
 }
 
+Color get transparent {
+  return const Color.fromRGBO(0, 0, 0, 0.5);
+}
+
 List<String> dias = ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"];
 
 //Routes

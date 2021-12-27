@@ -1,9 +1,28 @@
 import 'package:blog/constants.dart';
-import 'package:blog/widgets/blog/calendar/botom/SiguientesMeses.dart';
 import 'package:flutter/material.dart';
 
 class DiasDeLaSemana extends StatelessWidget {
-  const DiasDeLaSemana({Key? key}) : super(key: key);
+  final int day;
+  final Function setDay;
+  final bool loved;
+  const DiasDeLaSemana(this.day, this.setDay, this.loved, {Key? key})
+      : super(key: key);
+
+  Widget _getText(String day) {
+    return Text(
+      day,
+      style: TextStyle(
+        color: green,
+        fontSize: 20,
+      ),
+    );
+  }
+
+  Widget get _getHearth => Icon(
+        Icons.favorite,
+        size: 30,
+        color: red,
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +35,6 @@ class DiasDeLaSemana extends StatelessWidget {
         ),
       ),
       child: Stack(
-        clipBehavior: Clip.none,
         children: [
           Center(
             child: GridView.count(
@@ -24,24 +42,33 @@ class DiasDeLaSemana extends StatelessWidget {
               shrinkWrap: true,
               padding: EdgeInsets.only(right: 8),
               children: List.generate(
-                40,
-                (i) => Container(
-                  margin: EdgeInsets.only(left: 8),
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      '$i',
-                      style: TextStyle(
-                        color: green,
-                        fontSize: 20,
+                30,
+                (i) => day == i + 1
+                    ? Container(
+                        margin: EdgeInsets.only(left: 8),
+                        color: transparent,
+                        child: Center(child: _getText('${i + 1}')),
+                      )
+                    : GestureDetector(
+                        onTap: () => setDay(i + 1),
+                        child: Container(
+                          margin: EdgeInsets.only(left: 8),
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: loved
+                                ? Stack(
+                                    children: [
+                                      _getHearth,
+                                      _getText('${i + 1}'),
+                                    ],
+                                  )
+                                : _getText('${i + 1}'),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
               ),
             ),
           ),
-          SiguientesMeses(),
         ],
       ),
     );
