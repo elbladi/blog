@@ -65,6 +65,10 @@ flutter:
       fonts:
         - asset: fonts/Peralta-Regular.ttf
           style: italic
+    - family: PermanentMarker
+      fonts:
+        - asset: fonts/PermanentMarker-Regular.ttf
+          style: italic
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

@@ -4,6 +4,7 @@ import 'package:blog/models/FloatingOption.dart';
 import 'package:blog/models/Memory.dart';
 import 'package:blog/models/Month.dart';
 import 'package:blog/widgets/blog/calendar/Calendar.dart';
+import 'package:blog/widgets/blog/empty/EmptyMemory.dart';
 import 'package:blog/widgets/blog/text/ContentText.dart';
 import 'package:blog/widgets/blog/title/DayTitle.dart';
 import 'package:blog/widgets/floatingButtons/FloatingButton.dart';
@@ -216,18 +217,20 @@ class BlogContentState extends State<BlogContent> {
           children: [
             AnimatedPositioned(
               top: showCalendar ? 0 : -800,
-              child: Calendar(selectedDay, _setDay, month),
               curve: Curves.easeInOut,
               duration: Duration(seconds: 1),
+              child: Calendar(selectedDay, _setDay, month),
             ),
             AnimatedPositioned(
               top: showCalendar ? 420 : 80,
-              child: DayTitle(
-                  () => _selectOption(OptionName.Calendar), selectedDay.day),
               curve: Curves.easeInOut,
               duration: Duration(milliseconds: 800),
+              child: DayTitle(
+                  () => _selectOption(OptionName.Calendar), selectedDay.day),
             ),
             AnimatedPositioned(
+              curve: Curves.easeInOut,
+              duration: Duration(milliseconds: 800),
               top: showCalendar ? 470 : 140,
               width: !showCalendar ? width : width - 100,
               left: showCalendar ? 30 : 0,
@@ -237,17 +240,7 @@ class BlogContentState extends State<BlogContent> {
                       editionMode: editionMode,
                       controller: controller,
                     )
-                  : Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: GestureDetector(
-                        onTap: _crearNuevo,
-                        child: Image(
-                          image: AssetImage('assets/emptines.gif'),
-                        ),
-                      ),
-                    ),
-              curve: Curves.easeInOut,
-              duration: Duration(milliseconds: 800),
+                  : EmptyMemory(_crearNuevo),
             ),
           ],
         ),
