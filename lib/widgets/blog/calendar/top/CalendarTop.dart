@@ -49,7 +49,7 @@ class CalendarTop extends StatelessWidget {
                 child: FittedBox(
                   fit: BoxFit.fitWidth,
                   child: new Text(
-                    "Diciembre",
+                    mes,
                     style: TextStyle(
                       color: green,
                       fontSize: 44,

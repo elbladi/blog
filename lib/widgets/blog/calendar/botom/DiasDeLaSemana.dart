@@ -1,20 +1,31 @@
 import 'package:blog/constants.dart';
+import 'package:blog/models/Day.dart';
+import 'package:blog/models/Month.dart';
+import 'package:blog/widgets/utilities.dart';
 import 'package:flutter/material.dart';
 
 class DiasDeLaSemana extends StatelessWidget {
-  final int day;
+  final Day day;
+  final Month month;
   final Function setDay;
-  final bool loved;
-  const DiasDeLaSemana(this.day, this.setDay, this.loved, {Key? key})
+  // final bool loved;
+  const DiasDeLaSemana(this.day, this.setDay, this.month, {Key? key})
       : super(key: key);
 
-  Widget _getText(String day) {
-    return Text(
-      day,
-      style: TextStyle(
-        color: green,
-        fontSize: 20,
-      ),
+  bool get _getFav => getFavourite(day);
+
+  Widget _getText(int id) {
+    return Stack(
+      children: [
+        _getFav ? _getHearth : SizedBox(),
+        Text(
+          id.toString(),
+          style: TextStyle(
+            color: green,
+            fontSize: 20,
+          ),
+        ),
+      ],
     );
   }
 
@@ -42,12 +53,12 @@ class DiasDeLaSemana extends StatelessWidget {
               shrinkWrap: true,
               padding: EdgeInsets.only(right: 8),
               children: List.generate(
-                30,
-                (i) => day == i + 1
+                month.days.length,
+                (i) => month.days[i].day == day.day
                     ? Container(
                         margin: EdgeInsets.only(left: 8),
                         color: transparent,
-                        child: Center(child: _getText('${i + 1}')),
+                        child: Center(child: _getText(month.days[i].day)),
                       )
                     : GestureDetector(
                         onTap: () => setDay(i + 1),
@@ -55,14 +66,7 @@ class DiasDeLaSemana extends StatelessWidget {
                           margin: EdgeInsets.only(left: 8),
                           child: FittedBox(
                             fit: BoxFit.scaleDown,
-                            child: loved
-                                ? Stack(
-                                    children: [
-                                      _getHearth,
-                                      _getText('${i + 1}'),
-                                    ],
-                                  )
-                                : _getText('${i + 1}'),
+                            child: _getText(month.days[i].day),
                           ),
                         ),
                       ),

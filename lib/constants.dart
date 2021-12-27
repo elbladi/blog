@@ -24,3 +24,6 @@ List<String> dias = ["Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"];
 
 //Routes
 const ContentScreen = 'blog_main';
+
+const String mes = "Diciembre";
+const int year = 2021;

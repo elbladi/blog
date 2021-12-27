@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 class DayTitle extends StatelessWidget {
   final Function onPress;
-  const DayTitle(this.onPress, {Key? key}) : super(key: key);
+  final int day;
+  const DayTitle(this.onPress, this.day, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class DayTitle extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: Text(
-                "15 Diciembre 2021",
+                '$day $mes $year',
                 style: TextStyle(
                   color: blue,
                   fontSize: 27,

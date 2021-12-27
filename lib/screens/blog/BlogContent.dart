@@ -1,9 +1,13 @@
 import 'package:blog/constants.dart';
+import 'package:blog/models/Day.dart';
 import 'package:blog/models/FloatingOption.dart';
+import 'package:blog/models/Memory.dart';
+import 'package:blog/models/Month.dart';
 import 'package:blog/widgets/blog/calendar/Calendar.dart';
 import 'package:blog/widgets/blog/text/ContentText.dart';
 import 'package:blog/widgets/blog/title/DayTitle.dart';
 import 'package:blog/widgets/floatingButtons/FloatingButton.dart';
+import 'package:blog/widgets/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 
@@ -21,15 +25,16 @@ class BlogContentState extends State<BlogContent> {
   bool showCalendar = false;
   bool showOptions = false;
   bool editionMode = false;
-  bool favorite = false;
-  bool exist = true;
-  int day = 15;
   Function? closeThis;
   late TextEditingController controller;
-
+  late Day selectedDay;
+  late Month month;
   @override
   void initState() {
+    int day = 1;
     controller = TextEditingController(text: texto);
+    month = Month.getFromDB(mes);
+    selectedDay = month.days.firstWhere((dia) => dia.day == day);
     super.initState();
   }
 
@@ -77,6 +82,8 @@ class BlogContentState extends State<BlogContent> {
     }
   }
 
+  bool get _contentExist => selectedDay.exist;
+
   void _selectOption(OptionName id) {
     switch (id) {
       case OptionName.Calendar:
@@ -110,19 +117,24 @@ class BlogContentState extends State<BlogContent> {
         );
         break;
       case OptionName.NoFavorite:
-        this.setState(() {
-          favorite = true;
-        });
+        if (_contentExist) {
+          this.setState(() {
+            selectedDay.memory!.favorite = true;
+          });
+        }
         break;
       case OptionName.Favorite:
-        this.setState(() {
-          favorite = false;
-        });
+        if (_contentExist) {
+          this.setState(() {
+            selectedDay.memory!.favorite = false;
+          });
+        }
         break;
       case OptionName.Delete:
-        if (exist) {
+        if (_contentExist) {
           this.setState(() {
-            exist = false;
+            selectedDay.exist = false;
+            selectedDay.memory = null;
           });
         }
         _closeOptions();
@@ -149,15 +161,15 @@ class BlogContentState extends State<BlogContent> {
     this.setState(() {
       showCalendar = false;
       showOptions = false;
-      favorite = false;
-      exist = true;
+      selectedDay.exist = true;
+      selectedDay.memory = new Memory(false, "What's on your mind?");
       controller.text = "What's on your mind?";
     });
   }
 
-  void _setDay(int selectedDay) {
+  void _setDay(int selected) {
     this.setState(() {
-      day = selectedDay;
+      selectedDay = month.days.firstWhere((dia) => dia.day == selected);
     });
   }
 
@@ -171,7 +183,7 @@ class BlogContentState extends State<BlogContent> {
         showOptions,
         _setIsOpened,
         editionMode,
-        favorite,
+        getFavourite(selectedDay),
       ),
       body: Container(
         color: green,
@@ -181,13 +193,14 @@ class BlogContentState extends State<BlogContent> {
           children: [
             AnimatedPositioned(
               top: showCalendar ? 0 : -800,
-              child: Calendar(day, _setDay, favorite),
+              child: Calendar(selectedDay, _setDay, month),
               curve: Curves.easeInOut,
               duration: Duration(seconds: 1),
             ),
             AnimatedPositioned(
               top: showCalendar ? 420 : 80,
-              child: DayTitle(() => _selectOption(OptionName.Calendar)),
+              child: DayTitle(
+                  () => _selectOption(OptionName.Calendar), selectedDay.day),
               curve: Curves.easeInOut,
               duration: Duration(milliseconds: 800),
             ),
@@ -195,7 +208,7 @@ class BlogContentState extends State<BlogContent> {
               top: showCalendar ? 470 : 140,
               width: !showCalendar ? width : width - 100,
               left: showCalendar ? 30 : 0,
-              child: exist
+              child: selectedDay.exist
                   ? ContentText(
                       closeOptions: _closeOptions,
                       editionMode: editionMode,
