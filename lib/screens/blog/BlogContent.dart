@@ -11,9 +11,6 @@ import 'package:blog/widgets/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 
-const texto =
-    "Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum is simply dummy text of the printing and typesetting industry.Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum";
-
 class BlogContent extends StatefulWidget {
   const BlogContent({Key? key}) : super(key: key);
 
@@ -29,12 +26,14 @@ class BlogContentState extends State<BlogContent> {
   late TextEditingController controller;
   late Day selectedDay;
   late Month month;
+  late String uneditedText;
   @override
   void initState() {
     int day = 1;
-    controller = TextEditingController(text: texto);
     month = Month.getFromDB(mes);
     selectedDay = month.days.firstWhere((dia) => dia.day == day);
+    uneditedText = selectedDay.exist ? selectedDay.memory!.content : "";
+    controller = TextEditingController(text: uneditedText);
     super.initState();
   }
 
@@ -70,15 +69,27 @@ class BlogContentState extends State<BlogContent> {
     if (title == "Cancelar" && type == DismissType.BTN_CANCEL) {
       this.setState(() {
         editionMode = false;
-        controller.text = texto;
+        controller.text = uneditedText;
       });
       return;
     }
 
     if (title == "Publicar" && type == DismissType.BTN_OK) {
-      this.setState(() {
-        editionMode = false;
-      });
+      if (controller.text.isEmpty) {
+        this.setState(() {
+          editionMode = false;
+          selectedDay.memory = null;
+        });
+      } else {
+        this.setState(() {
+          editionMode = false;
+          if (_contentExist) {
+            selectedDay.memory!.content = controller.text;
+          } else {
+            selectedDay.memory = new Memory(false, controller.text);
+          }
+        });
+      }
     }
   }
 
@@ -94,17 +105,21 @@ class BlogContentState extends State<BlogContent> {
         break;
       case OptionName.Edit:
         _closeOptions();
-        if (editionMode) {
-          _showDialog(
-            'Publicar',
-            '¿Publicar cambios?',
-            DialogType.INFO,
-            okBtn: true,
-          );
+        if (_contentExist) {
+          if (editionMode) {
+            _showDialog(
+              'Publicar',
+              '¿Publicar cambios?',
+              DialogType.INFO,
+              okBtn: true,
+            );
+          } else {
+            this.setState(() {
+              editionMode = true;
+            });
+          }
         } else {
-          this.setState(() {
-            editionMode = true;
-          });
+          _crearNuevo();
         }
         break;
       case OptionName.Cancel:
@@ -164,12 +179,20 @@ class BlogContentState extends State<BlogContent> {
       selectedDay.exist = true;
       selectedDay.memory = new Memory(false, "What's on your mind?");
       controller.text = "What's on your mind?";
+      editionMode = true;
     });
   }
 
   void _setDay(int selected) {
+    if (editionMode) {
+      _selectOption(OptionName.Cancel);
+      return;
+    }
+    Day newDate = month.days.firstWhere((dia) => dia.day == selected);
     this.setState(() {
-      selectedDay = month.days.firstWhere((dia) => dia.day == selected);
+      selectedDay = newDate;
+      controller.text =
+          newDate.exist ? newDate.memory!.content : controller.text = "";
     });
   }
 

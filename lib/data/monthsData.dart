@@ -23,4 +23,28 @@ List<dynamic> daysData = [
     "day": 4,
     "exist": false,
   },
+  {
+    "day": 5,
+    "exist": false,
+  },
+  {
+    "day": 6,
+    "exist": true,
+    "memory": {
+      "content": "este es el contenido 2",
+      "favorite": false,
+    }
+  },
+  {
+    "day": 7,
+    "exist": true,
+    "memory": {
+      "content": "este es el contenido 3",
+      "favorite": false,
+    }
+  },
+  {
+    "day": 8,
+    "exist": false,
+  },
 ];

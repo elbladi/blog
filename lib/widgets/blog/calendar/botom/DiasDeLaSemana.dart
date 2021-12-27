@@ -8,31 +8,36 @@ class DiasDeLaSemana extends StatelessWidget {
   final Day day;
   final Month month;
   final Function setDay;
-  // final bool loved;
   const DiasDeLaSemana(this.day, this.setDay, this.month, {Key? key})
       : super(key: key);
 
-  bool get _getFav => getFavourite(day);
+  Color _getColor(int id) {
+    return month.days[id - 1].exist ? green : transparent;
+  }
 
-  Widget _getText(int id) {
+  Widget _getText(int id, bool fav) {
     return Stack(
       children: [
-        _getFav ? _getHearth : SizedBox(),
-        Text(
-          id.toString(),
-          style: TextStyle(
-            color: green,
-            fontSize: 20,
+        fav ? _getHearth : SizedBox(),
+        Center(
+          child: Text(
+            id.toString(),
+            style: TextStyle(
+              color: _getColor(id),
+              fontSize: 20,
+            ),
           ),
         ),
       ],
     );
   }
 
-  Widget get _getHearth => Icon(
-        Icons.favorite,
-        size: 30,
-        color: red,
+  Widget get _getHearth => Positioned.fill(
+        child: Icon(
+          Icons.favorite,
+          size: 30,
+          color: red,
+        ),
       );
 
   @override
@@ -56,17 +61,27 @@ class DiasDeLaSemana extends StatelessWidget {
                 month.days.length,
                 (i) => month.days[i].day == day.day
                     ? Container(
-                        margin: EdgeInsets.only(left: 8),
-                        color: transparent,
-                        child: Center(child: _getText(month.days[i].day)),
+                        margin: const EdgeInsets.only(left: 8),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          color: transparent,
+                        ),
+                        child: Center(
+                          child: _getText(
+                            month.days[i].day,
+                            getFavourite(month.days[i]),
+                          ),
+                        ),
                       )
                     : GestureDetector(
                         onTap: () => setDay(i + 1),
                         child: Container(
-                          margin: EdgeInsets.only(left: 8),
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: _getText(month.days[i].day),
+                          margin: const EdgeInsets.only(left: 8),
+                          child: Center(
+                            child: _getText(
+                              month.days[i].day,
+                              getFavourite(month.days[i]),
+                            ),
                           ),
                         ),
                       ),
