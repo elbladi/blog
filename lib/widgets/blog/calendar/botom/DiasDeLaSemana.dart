@@ -52,10 +52,6 @@ class DiasDeLaSemana extends StatelessWidget {
     };
   }
 
-  void _onTap(int i) {
-    ;
-  }
-
   @override
   Widget build(BuildContext context) {
     final details = getDetails();
@@ -75,46 +71,6 @@ class DiasDeLaSemana extends StatelessWidget {
               crossAxisCount: 7,
               shrinkWrap: true,
               padding: EdgeInsets.only(right: 8),
-              // children: List.generate(
-              //   details["lenght"]!,
-              //   (i) => Container(
-              //     margin: const EdgeInsets.only(left: 8),
-              //     child: Center(
-              //       child: startAt >= i + 1
-              //           ? SizedBox()
-              //           : _getText((i + 1 - startAt), false),
-              //     ),
-              //   ),
-              // ),
-              // children: List.generate(
-              //   month.days.length,
-              //   (i) => month.days[i].day == day.day
-              //       ? Container(
-              //           margin: const EdgeInsets.only(left: 8),
-              //           decoration: BoxDecoration(
-              //             borderRadius: BorderRadius.all(Radius.circular(10)),
-              //             color: transparent,
-              //           ),
-              //           child: Center(
-              //             child: _getText(
-              //               month.days[i].day,
-              //               getFavourite(month.days[i]),
-              //             ),
-              //           ),
-              //         )
-              //       : GestureDetector(
-              //           onTap: () => setDay(i + 1),
-              //           child: Container(
-              //             margin: const EdgeInsets.only(left: 8),
-              //             child: Center(
-              //               child: _getText(
-              //                 month.days[i].day,
-              //                 getFavourite(month.days[i]),
-              //               ),
-              //             ),
-              //           ),
-              //         ),
-              // ),
               children: List.generate(
                 details["lenght"]!,
                 (i) => startAt >= i + 1
