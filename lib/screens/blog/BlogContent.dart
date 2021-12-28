@@ -211,42 +211,40 @@ class BlogContentState extends State<BlogContent> {
         editionMode,
         getFavourite(selectedDay),
       ),
-      body: SafeArea(
-        child: Container(
-          color: green,
-          height: double.infinity,
-          width: width,
-          child: Stack(
-            children: [
-              AnimatedPositioned(
-                top: showCalendar ? 0 : -800,
-                curve: Curves.easeInOut,
-                duration: Duration(seconds: 1),
-                child: Calendar(selectedDay, _setDay, month),
-              ),
-              AnimatedPositioned(
-                top: showCalendar ? 420 : 80,
-                curve: Curves.easeInOut,
-                duration: Duration(milliseconds: 800),
-                child: DayTitle(
-                    () => _selectOption(OptionName.Calendar), selectedDay.day),
-              ),
-              AnimatedPositioned(
-                curve: Curves.easeInOut,
-                duration: Duration(milliseconds: 800),
-                top: showCalendar ? 470 : 140,
-                width: !showCalendar ? width : width - 100,
-                left: showCalendar ? 30 : 0,
-                child: selectedDay.exist
-                    ? ContentText(
-                        closeOptions: _closeOptions,
-                        editionMode: editionMode,
-                        controller: controller,
-                      )
-                    : EmptyMemory(_crearNuevo),
-              ),
-            ],
-          ),
+      body: Container(
+        color: green,
+        height: double.infinity,
+        width: width,
+        child: Stack(
+          children: [
+            AnimatedPositioned(
+              top: showCalendar ? 0 : -800,
+              curve: Curves.easeInOut,
+              duration: Duration(seconds: 1),
+              child: Calendar(selectedDay, _setDay, month),
+            ),
+            AnimatedPositioned(
+              top: showCalendar ? 420 : 80,
+              curve: Curves.easeInOut,
+              duration: Duration(milliseconds: 800),
+              child: DayTitle(
+                  () => _selectOption(OptionName.Calendar), selectedDay.day),
+            ),
+            AnimatedPositioned(
+              curve: Curves.easeInOut,
+              duration: Duration(milliseconds: 800),
+              top: showCalendar ? 470 : 140,
+              width: !showCalendar ? width : width - 100,
+              left: showCalendar ? 30 : 0,
+              child: selectedDay.exist
+                  ? ContentText(
+                      closeOptions: _closeOptions,
+                      editionMode: editionMode,
+                      controller: controller,
+                    )
+                  : EmptyMemory(_crearNuevo),
+            ),
+          ],
         ),
       ),
     );
