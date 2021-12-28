@@ -8,14 +8,18 @@ class AnimatedFloatingActionButton extends StatefulWidget {
   final Color? colorStartAnimation;
   final Color? colorEndAnimation;
   final AnimatedIconData? animatedIconData;
+  final bool? isOpened;
+  final Function? setIsOpened;
 
-  AnimatedFloatingActionButton(
-      {Key? key,
-      this.fabButtons,
-      this.colorStartAnimation,
-      this.colorEndAnimation,
-      this.animatedIconData})
-      : super(key: key);
+  AnimatedFloatingActionButton({
+    Key? key,
+    this.fabButtons,
+    this.colorStartAnimation,
+    this.colorEndAnimation,
+    this.animatedIconData,
+    this.isOpened,
+    this.setIsOpened,
+  }) : super(key: key);
 
   @override
   _AnimatedFloatingActionButtonState createState() =>
@@ -25,7 +29,6 @@ class AnimatedFloatingActionButton extends StatefulWidget {
 class _AnimatedFloatingActionButtonState
     extends State<AnimatedFloatingActionButton>
     with SingleTickerProviderStateMixin {
-  bool isOpened = false;
   late AnimationController _animationController;
   late Animation<Color?> _buttonColor;
   late Animation<double> _animateIcon;
@@ -74,12 +77,20 @@ class _AnimatedFloatingActionButtonState
   }
 
   animate() {
+    final isOpened = widget.isOpened!;
     if (!isOpened) {
       _animationController.forward();
     } else {
       _animationController.reverse();
     }
-    isOpened = !isOpened;
+    final setIsOpened = widget.setIsOpened;
+    if (setIsOpened != null) {
+      setIsOpened(!isOpened, _closeThis);
+    }
+  }
+
+  void _closeThis() {
+    animate();
   }
 
   Widget toggle() {
@@ -89,7 +100,7 @@ class _AnimatedFloatingActionButtonState
         onPressed: animate,
         tooltip: 'Toggle',
         child: AnimatedIcon(
-          icon: widget.animatedIconData ?? AnimatedIcons.pause_play,
+          icon: widget.animatedIconData!,
           progress: _animateIcon,
         ),
       ),

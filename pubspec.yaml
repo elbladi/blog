@@ -28,6 +28,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutter_svg: 0.21.0
+  awesome_dialog: ^2.1.1
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +64,10 @@ flutter:
     - family: Peralta
       fonts:
         - asset: fonts/Peralta-Regular.ttf
+          style: italic
+    - family: PermanentMarker
+      fonts:
+        - asset: fonts/PermanentMarker-Regular.ttf
           style: italic
   #   - family: Trajan Pro
   #     fonts:

@@ -1,12 +1,61 @@
 import 'package:blog/constants.dart';
-import 'package:blog/widgets/blog/calendar/botom/SiguientesMeses.dart';
+import 'package:blog/models/Day.dart';
+import 'package:blog/models/Month.dart';
+import 'package:blog/widgets/utilities.dart';
 import 'package:flutter/material.dart';
 
 class DiasDeLaSemana extends StatelessWidget {
-  const DiasDeLaSemana({Key? key}) : super(key: key);
+  final Day day;
+  final Month month;
+  final Function setDay;
+  const DiasDeLaSemana(this.day, this.setDay, this.month, {Key? key})
+      : super(key: key);
+
+  Color _getColor(int id) {
+    return month.days[id - 1].exist ? green : transparent;
+  }
+
+  Widget _getText(int id, bool fav) {
+    return Stack(
+      children: [
+        fav ? _getHearth : SizedBox(),
+        Center(
+          child: FittedBox(
+            fit: BoxFit.contain,
+            child: Text(
+              id.toString(),
+              style: TextStyle(
+                color: _getColor(id),
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget get _getHearth => Positioned.fill(
+        child: Icon(
+          Icons.favorite,
+          size: 30,
+          color: red,
+        ),
+      );
+
+  Map<String, int> getDetails() {
+    final monthId = months.indexOf(month.id);
+    final firstDay = new DateTime(2021, monthId + 1, 1);
+    return {
+      "weekday": firstDay.weekday,
+      "lenght": month.days.length + (firstDay.weekday - 1)
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
+    final details = getDetails();
+    int startAt = details["weekday"]! - 1;
     return Container(
       decoration: BoxDecoration(
         color: blue,
@@ -16,7 +65,6 @@ class DiasDeLaSemana extends StatelessWidget {
         ),
       ),
       child: Stack(
-        clipBehavior: Clip.none,
         children: [
           Center(
             child: GridView.count(
@@ -24,24 +72,41 @@ class DiasDeLaSemana extends StatelessWidget {
               shrinkWrap: true,
               padding: EdgeInsets.only(right: 8),
               children: List.generate(
-                40,
-                (i) => Container(
-                  margin: EdgeInsets.only(left: 8),
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      '$i',
-                      style: TextStyle(
-                        color: green,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
-                ),
+                details["lenght"]!,
+                (i) => startAt >= i + 1
+                    ? SizedBox()
+                    : day.day == (i + 1 - startAt)
+                        ? Container(
+                            margin: const EdgeInsets.only(left: 8),
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                              color: transparent,
+                            ),
+                            child: Center(
+                              child: _getText(
+                                (i + 1 - startAt),
+                                getFavourite(month.days[i - startAt]),
+                              ),
+                            ),
+                          )
+                        : GestureDetector(
+                            onTap: () {
+                              setDay(i - 1);
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(left: 8),
+                              child: Center(
+                                child: _getText(
+                                  (i + 1 - startAt),
+                                  getFavourite(month.days[(i - startAt)]),
+                                ),
+                              ),
+                            ),
+                          ),
               ),
             ),
           ),
-          SiguientesMeses(),
         ],
       ),
     );

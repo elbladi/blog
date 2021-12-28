@@ -1,3 +1,4 @@
+import 'package:blog/models/Day.dart';
 import 'package:flutter/material.dart';
 
 enum Size { small, medium, large }
@@ -24,4 +25,9 @@ List<BoxShadow> getShadows() {
       offset: Offset(0, 3),
     ),
   ];
+}
+
+bool getFavourite(Day day) {
+  if (!day.exist) return false;
+  return day.memory!.favorite;
 }
