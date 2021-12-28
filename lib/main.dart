@@ -23,8 +23,7 @@ class MyApp extends StatelessWidget {
         fontFamily: "Peralta",
         primarySwatch: Colors.blue,
       ),
-      initialRoute: ContentScreen,
-      // initialRoute: "/",
+      initialRoute: "/",
       routes: {
         '/': (context) => LoginScreen(),
         ContentScreen: (ctx) => BlogContent(),

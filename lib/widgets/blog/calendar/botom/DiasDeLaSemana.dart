@@ -20,11 +20,14 @@ class DiasDeLaSemana extends StatelessWidget {
       children: [
         fav ? _getHearth : SizedBox(),
         Center(
-          child: Text(
-            id.toString(),
-            style: TextStyle(
-              color: _getColor(id),
-              fontSize: 20,
+          child: FittedBox(
+            fit: BoxFit.contain,
+            child: Text(
+              id.toString(),
+              style: TextStyle(
+                color: _getColor(id),
+                fontSize: 20,
+              ),
             ),
           ),
         ),
@@ -40,8 +43,23 @@ class DiasDeLaSemana extends StatelessWidget {
         ),
       );
 
+  Map<String, int> getDetails() {
+    final monthId = months.indexOf(month.id);
+    final firstDay = new DateTime(2021, monthId + 1, 1);
+    return {
+      "weekday": firstDay.weekday,
+      "lenght": month.days.length + (firstDay.weekday - 1)
+    };
+  }
+
+  void _onTap(int i) {
+    ;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final details = getDetails();
+    int startAt = details["weekday"]! - 1;
     return Container(
       decoration: BoxDecoration(
         color: blue,
@@ -57,34 +75,79 @@ class DiasDeLaSemana extends StatelessWidget {
               crossAxisCount: 7,
               shrinkWrap: true,
               padding: EdgeInsets.only(right: 8),
+              // children: List.generate(
+              //   details["lenght"]!,
+              //   (i) => Container(
+              //     margin: const EdgeInsets.only(left: 8),
+              //     child: Center(
+              //       child: startAt >= i + 1
+              //           ? SizedBox()
+              //           : _getText((i + 1 - startAt), false),
+              //     ),
+              //   ),
+              // ),
+              // children: List.generate(
+              //   month.days.length,
+              //   (i) => month.days[i].day == day.day
+              //       ? Container(
+              //           margin: const EdgeInsets.only(left: 8),
+              //           decoration: BoxDecoration(
+              //             borderRadius: BorderRadius.all(Radius.circular(10)),
+              //             color: transparent,
+              //           ),
+              //           child: Center(
+              //             child: _getText(
+              //               month.days[i].day,
+              //               getFavourite(month.days[i]),
+              //             ),
+              //           ),
+              //         )
+              //       : GestureDetector(
+              //           onTap: () => setDay(i + 1),
+              //           child: Container(
+              //             margin: const EdgeInsets.only(left: 8),
+              //             child: Center(
+              //               child: _getText(
+              //                 month.days[i].day,
+              //                 getFavourite(month.days[i]),
+              //               ),
+              //             ),
+              //           ),
+              //         ),
+              // ),
               children: List.generate(
-                month.days.length,
-                (i) => month.days[i].day == day.day
-                    ? Container(
-                        margin: const EdgeInsets.only(left: 8),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          color: transparent,
-                        ),
-                        child: Center(
-                          child: _getText(
-                            month.days[i].day,
-                            getFavourite(month.days[i]),
-                          ),
-                        ),
-                      )
-                    : GestureDetector(
-                        onTap: () => setDay(i + 1),
-                        child: Container(
-                          margin: const EdgeInsets.only(left: 8),
-                          child: Center(
-                            child: _getText(
-                              month.days[i].day,
-                              getFavourite(month.days[i]),
+                details["lenght"]!,
+                (i) => startAt >= i + 1
+                    ? SizedBox()
+                    : day.day == (i + 1 - startAt)
+                        ? Container(
+                            margin: const EdgeInsets.only(left: 8),
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                              color: transparent,
+                            ),
+                            child: Center(
+                              child: _getText(
+                                (i + 1 - startAt),
+                                getFavourite(month.days[i - startAt]),
+                              ),
+                            ),
+                          )
+                        : GestureDetector(
+                            onTap: () {
+                              setDay(i - 1);
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(left: 8),
+                              child: Center(
+                                child: _getText(
+                                  (i + 1 - startAt),
+                                  getFavourite(month.days[(i - startAt)]),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
               ),
             ),
           ),

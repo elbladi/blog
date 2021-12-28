@@ -47,7 +47,6 @@ class _ContentTextState extends State<ContentText> {
                               focusedBorder: InputBorder.none,
                             ),
                             controller: widget.controller,
-                            // initialValue: widget.controller.text,
                           )
                         : Text(widget.controller.text, style: _textStyle),
                     Container(

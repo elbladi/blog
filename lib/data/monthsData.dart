@@ -1,4 +1,26 @@
-List<dynamic> daysData = [
+const months = const [
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Julio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre"
+];
+
+List<dynamic> get daysData => List.generate(
+    31,
+    (i) => {
+          "day": i + 1,
+          "exist": false,
+        });
+
+List<dynamic> daysData2 = [
   {
     "day": 1,
     "exist": false,

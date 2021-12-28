@@ -3,6 +3,7 @@ import 'package:blog/models/Day.dart';
 import 'package:blog/models/FloatingOption.dart';
 import 'package:blog/models/Memory.dart';
 import 'package:blog/models/Month.dart';
+import 'package:blog/service/login.dart';
 import 'package:blog/widgets/blog/calendar/Calendar.dart';
 import 'package:blog/widgets/blog/empty/EmptyMemory.dart';
 import 'package:blog/widgets/blog/text/ContentText.dart';
@@ -30,9 +31,9 @@ class BlogContentState extends State<BlogContent> {
   late String uneditedText;
   @override
   void initState() {
-    int day = 1;
-    month = Month.getFromDB(mes);
-    selectedDay = month.days.firstWhere((dia) => dia.day == day);
+    final args = loadCurrentData();
+    month = args.month;
+    selectedDay = args.day;
     uneditedText = selectedDay.exist ? selectedDay.memory!.content : "";
     controller = TextEditingController(text: uneditedText);
     super.initState();
@@ -46,24 +47,22 @@ class BlogContentState extends State<BlogContent> {
     String cancelTxt = "Cancelar",
   }) {
     return AwesomeDialog(
-      context: context,
-      dialogType: type,
-      headerAnimationLoop: true,
-      animType: AnimType.SCALE,
-      title: title,
-      desc: desc,
-      btnOkText: okBtn ? "Ok" : null,
-      btnCancelText: cancelTxt,
-      btnOkOnPress: okBtn ? () {} : null,
-      btnCancelColor: red,
-      buttonsTextStyle: TextStyle(fontSize: 15),
-      btnOkColor: blue,
-      btnCancelOnPress: () {},
-      onDissmissCallback: (type) {
-        _processResponse(type, title);
-        return;
-      },
-    )..show();
+        context: context,
+        dialogType: type,
+        headerAnimationLoop: true,
+        animType: AnimType.SCALE,
+        title: title,
+        desc: desc,
+        btnOkText: okBtn ? "Ok" : null,
+        btnCancelText: cancelTxt,
+        btnOkOnPress:
+            okBtn ? () => _processResponse(DismissType.BTN_OK, title) : null,
+        btnCancelColor: red,
+        buttonsTextStyle: TextStyle(fontSize: 15),
+        btnOkColor: blue,
+        btnCancelOnPress: () => _processResponse(DismissType.BTN_CANCEL, title),
+        onDissmissCallback: (type) {})
+      ..show();
   }
 
   void _processResponse(DismissType type, String title) {
@@ -153,6 +152,7 @@ class BlogContentState extends State<BlogContent> {
             selectedDay.exist = false;
             selectedDay.memory = null;
             controller.text = "";
+            editionMode = false;
           });
         }
         _closeOptions();
