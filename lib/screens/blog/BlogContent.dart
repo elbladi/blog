@@ -102,6 +102,7 @@ class BlogContentState extends State<BlogContent> {
     switch (id) {
       case OptionName.Calendar:
         _closeOptions();
+        if (isWeb) return;
         this.setState(() {
           showCalendar = !showCalendar;
         });

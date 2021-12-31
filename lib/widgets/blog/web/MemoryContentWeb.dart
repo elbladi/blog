@@ -26,7 +26,6 @@ class MemoryContentWeb extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final width = size.width;
-    final height = size.height;
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -40,15 +39,9 @@ class MemoryContentWeb extends StatelessWidget {
               controller: controller,
             ),
           if (!selectedDay.exist)
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Image(
-                  height: height - height * 0.3,
-                  image: AssetImage('assets/emptines.gif'),
-                ),
-              ),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image(image: AssetImage('assets/emptines.gif')),
             ),
           if (!selectedDay.exist) SizedBox(height: 40),
           if (!selectedDay.exist)
