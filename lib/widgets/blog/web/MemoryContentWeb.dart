@@ -1,4 +1,5 @@
 import 'package:blog/constants.dart';
+import 'package:blog/models/Calendar.dart';
 import 'package:blog/models/Day.dart';
 import 'package:blog/models/FloatingOption.dart';
 import 'package:blog/widgets/blog/text/ContentText.dart';
@@ -11,6 +12,7 @@ class MemoryContentWeb extends StatelessWidget {
   final Function crearNuevo;
   final Day selectedDay;
   final bool editionMode;
+  final Calendar calendar;
   final TextEditingController controller;
 
   MemoryContentWeb({
@@ -20,6 +22,7 @@ class MemoryContentWeb extends StatelessWidget {
     required this.editionMode,
     required this.controller,
     required this.crearNuevo,
+    required this.calendar,
   });
 
   @override
@@ -31,7 +34,8 @@ class MemoryContentWeb extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          DayTitle(() => selectOption(OptionName.Calendar), selectedDay.day),
+          DayTitle(() => selectOption(OptionName.Calendar), selectedDay.day,
+              calendar),
           if (selectedDay.exist)
             ContentText(
               closeOptions: closeOptions,

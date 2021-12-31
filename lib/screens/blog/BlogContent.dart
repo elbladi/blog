@@ -1,4 +1,5 @@
 import 'package:blog/constants.dart';
+import 'package:blog/models/Calendar.dart';
 import 'package:blog/models/Day.dart';
 import 'package:blog/models/FloatingOption.dart';
 import 'package:blog/models/Memory.dart';
@@ -32,11 +33,13 @@ class BlogContentState extends State<BlogContent> {
   late Day selectedDay;
   late Month month;
   late String uneditedText;
+  late Calendar calendar;
   @override
   void initState() {
     final args = loadCurrentData();
     month = args.month;
     selectedDay = args.day;
+    calendar = args.calendar;
     uneditedText = selectedDay.exist ? selectedDay.memory!.content : "";
     controller = TextEditingController(text: uneditedText);
     super.initState();
@@ -228,12 +231,13 @@ class BlogContentState extends State<BlogContent> {
         child: getStackOrRow(
           [
             isWeb
-                ? Calendar(selectedDay, _setDay, month)
+                ? CalendarWidget(selectedDay, _setDay, month, calendar.year)
                 : AnimatedPositioned(
                     top: showCalendar ? 0 : -800,
                     curve: Curves.easeInOut,
                     duration: Duration(seconds: 1),
-                    child: Calendar(selectedDay, _setDay, month),
+                    child: CalendarWidget(
+                        selectedDay, _setDay, month, calendar.year),
                   ),
             isWeb
                 ? MemoryContentWeb(
@@ -242,13 +246,17 @@ class BlogContentState extends State<BlogContent> {
                     closeOptions: _closeOptions,
                     editionMode: editionMode,
                     controller: controller,
-                    crearNuevo: _crearNuevo)
+                    crearNuevo: _crearNuevo,
+                    calendar: calendar)
                 : AnimatedPositioned(
                     top: showCalendar ? 420 : 80,
                     curve: Curves.easeInOut,
                     duration: Duration(milliseconds: 800),
-                    child: DayTitle(() => _selectOption(OptionName.Calendar),
-                        selectedDay.day),
+                    child: DayTitle(
+                      () => _selectOption(OptionName.Calendar),
+                      selectedDay.day,
+                      calendar,
+                    ),
                   ),
             isWeb
                 ? OptionsWeb(favorite, _selectOption, editionMode)

@@ -6,11 +6,12 @@ import 'package:blog/widgets/blog/calendar/botom/CalendarBottom.dart';
 import 'package:blog/widgets/blog/calendar/top/CalendarTop.dart';
 import 'package:flutter/material.dart';
 
-class Calendar extends StatelessWidget {
+class CalendarWidget extends StatelessWidget {
   final Day day;
   final Function setDay;
   final Month month;
-  const Calendar(this.day, this.setDay, this.month, {Key? key})
+  final int year;
+  const CalendarWidget(this.day, this.setDay, this.month, this.year, {Key? key})
       : super(key: key);
 
   @override
@@ -27,7 +28,7 @@ class Calendar extends StatelessWidget {
         height: isWeb ? double.infinity : height - height * 0.5,
         child: Stack(
           children: [
-            CalendarTop(),
+            CalendarTop(year, "Diciembre"),
             CalendarBototm(day, setDay, month),
             Ligas(),
           ],

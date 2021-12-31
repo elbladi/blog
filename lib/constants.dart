@@ -37,6 +37,3 @@ List<String> months = [
 ];
 //Routes
 const ContentScreen = 'blog_main';
-
-const String mes = "Diciembre";
-const int year = 2021;
