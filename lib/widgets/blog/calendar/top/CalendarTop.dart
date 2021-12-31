@@ -1,3 +1,4 @@
+import 'package:blog/responsive/utilitites.dart';
 import 'package:flutter/material.dart';
 import 'package:blog/constants.dart';
 
@@ -8,7 +9,7 @@ class CalendarTop extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 50),
+      padding: isWeb ? null : EdgeInsets.symmetric(horizontal: 50),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -20,7 +21,7 @@ class CalendarTop extends StatelessWidget {
               ),
               color: red,
             ),
-            width: width * 0.2,
+            width: isWeb ? 65 : width * 0.2,
             height: 74,
             child: Center(
                 child: RotatedBox(
@@ -33,26 +34,28 @@ class CalendarTop extends StatelessWidget {
                       ),
                     ))),
           ),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(20),
-                bottomRight: Radius.circular(20),
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(20),
+                  bottomRight: Radius.circular(20),
+                ),
+                color: blue,
               ),
-              color: blue,
-            ),
-            width: width * 0.5,
-            height: 74,
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5),
-                child: FittedBox(
-                  fit: BoxFit.fitWidth,
-                  child: new Text(
-                    mes,
-                    style: TextStyle(
-                      color: green,
-                      fontSize: 44,
+              width: width * 0.5,
+              height: 74,
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: FittedBox(
+                    fit: BoxFit.fitWidth,
+                    child: new Text(
+                      mes,
+                      style: TextStyle(
+                        color: green,
+                        fontSize: 44,
+                      ),
                     ),
                   ),
                 ),

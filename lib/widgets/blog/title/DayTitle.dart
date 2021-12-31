@@ -1,4 +1,5 @@
 import 'package:blog/constants.dart';
+import 'package:blog/responsive/utilitites.dart';
 import 'package:flutter/material.dart';
 
 class DayTitle extends StatelessWidget {
@@ -11,7 +12,7 @@ class DayTitle extends StatelessWidget {
     return GestureDetector(
       onTap: () => onPress(),
       child: Padding(
-        padding: const EdgeInsets.only(left: 10),
+        padding: EdgeInsets.only(left: isWeb ? 20 : 10),
         child: Row(
           children: [
             Icon(Icons.calendar_today, color: red),

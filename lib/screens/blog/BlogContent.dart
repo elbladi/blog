@@ -3,11 +3,14 @@ import 'package:blog/models/Day.dart';
 import 'package:blog/models/FloatingOption.dart';
 import 'package:blog/models/Memory.dart';
 import 'package:blog/models/Month.dart';
+import 'package:blog/responsive/utilitites.dart';
 import 'package:blog/service/login.dart';
 import 'package:blog/widgets/blog/calendar/Calendar.dart';
 import 'package:blog/widgets/blog/empty/EmptyMemory.dart';
 import 'package:blog/widgets/blog/text/ContentText.dart';
 import 'package:blog/widgets/blog/title/DayTitle.dart';
+import 'package:blog/widgets/blog/web/MemoryContentWeb.dart';
+import 'package:blog/widgets/blog/web/OptionsWeb.dart';
 import 'package:blog/widgets/floatingButtons/FloatingButton.dart';
 import 'package:blog/widgets/utilities.dart';
 import 'package:flutter/material.dart';
@@ -99,6 +102,7 @@ class BlogContentState extends State<BlogContent> {
     switch (id) {
       case OptionName.Calendar:
         _closeOptions();
+        if (isWeb) return;
         this.setState(() {
           showCalendar = !showCalendar;
         });
@@ -170,6 +174,7 @@ class BlogContentState extends State<BlogContent> {
   }
 
   Function? _closeOptions() {
+    if (isWeb) return null;
     if (showOptions && closeThis != null) {
       closeThis!();
     }
@@ -199,51 +204,68 @@ class BlogContentState extends State<BlogContent> {
     });
   }
 
+  List<Widget> webWidgets(double width) => [];
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final width = size.width;
+    bool favorite = getFavourite(selectedDay);
     return Scaffold(
-      floatingActionButton: FloatingButton(
-        _selectOption,
-        showOptions,
-        _setIsOpened,
-        editionMode,
-        getFavourite(selectedDay),
-      ),
+      floatingActionButton: isWeb
+          ? null
+          : FloatingButton(
+              _selectOption,
+              showOptions,
+              _setIsOpened,
+              editionMode,
+              favorite,
+            ),
       body: Container(
         color: green,
         height: double.infinity,
         width: width,
-        child: Stack(
-          children: [
-            AnimatedPositioned(
-              top: showCalendar ? 0 : -800,
-              curve: Curves.easeInOut,
-              duration: Duration(seconds: 1),
-              child: Calendar(selectedDay, _setDay, month),
-            ),
-            AnimatedPositioned(
-              top: showCalendar ? 420 : 80,
-              curve: Curves.easeInOut,
-              duration: Duration(milliseconds: 800),
-              child: DayTitle(
-                  () => _selectOption(OptionName.Calendar), selectedDay.day),
-            ),
-            AnimatedPositioned(
-              curve: Curves.easeInOut,
-              duration: Duration(milliseconds: 800),
-              top: showCalendar ? 470 : 140,
-              width: !showCalendar ? width : width - 100,
-              left: showCalendar ? 30 : 0,
-              child: selectedDay.exist
-                  ? ContentText(
-                      closeOptions: _closeOptions,
-                      editionMode: editionMode,
-                      controller: controller,
-                    )
-                  : EmptyMemory(_crearNuevo),
-            ),
+        child: getStackOrRow(
+          [
+            isWeb
+                ? Calendar(selectedDay, _setDay, month)
+                : AnimatedPositioned(
+                    top: showCalendar ? 0 : -800,
+                    curve: Curves.easeInOut,
+                    duration: Duration(seconds: 1),
+                    child: Calendar(selectedDay, _setDay, month),
+                  ),
+            isWeb
+                ? MemoryContentWeb(
+                    selectOption: _selectOption,
+                    selectedDay: selectedDay,
+                    closeOptions: _closeOptions,
+                    editionMode: editionMode,
+                    controller: controller,
+                    crearNuevo: _crearNuevo)
+                : AnimatedPositioned(
+                    top: showCalendar ? 420 : 80,
+                    curve: Curves.easeInOut,
+                    duration: Duration(milliseconds: 800),
+                    child: DayTitle(() => _selectOption(OptionName.Calendar),
+                        selectedDay.day),
+                  ),
+            isWeb
+                ? OptionsWeb(favorite, _selectOption, editionMode)
+                : AnimatedPositioned(
+                    curve: Curves.easeInOut,
+                    duration: Duration(milliseconds: 800),
+                    top: showCalendar ? 470 : 140,
+                    width: !showCalendar ? width : width - 100,
+                    left: showCalendar ? 30 : 0,
+                    child: selectedDay.exist
+                        ? ContentText(
+                            closeOptions: _closeOptions,
+                            editionMode: editionMode,
+                            controller: controller,
+                          )
+                        : EmptyMemory(_crearNuevo),
+                  ),
           ],
         ),
       ),
