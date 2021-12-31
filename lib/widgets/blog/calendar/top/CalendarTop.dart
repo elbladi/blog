@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:blog/constants.dart';
 
 class CalendarTop extends StatelessWidget {
-  const CalendarTop({Key? key}) : super(key: key);
+  final String month;
+  final int year;
+  const CalendarTop(this.year, this.month, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class CalendarTop extends StatelessWidget {
                 child: RotatedBox(
                     quarterTurns: 3,
                     child: Text(
-                      "2021",
+                      year.toString(),
                       style: TextStyle(
                         color: green,
                         fontSize: 22,
@@ -51,7 +53,7 @@ class CalendarTop extends StatelessWidget {
                   child: FittedBox(
                     fit: BoxFit.fitWidth,
                     child: new Text(
-                      mes,
+                      month,
                       style: TextStyle(
                         color: green,
                         fontSize: 44,

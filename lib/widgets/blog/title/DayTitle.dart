@@ -1,11 +1,15 @@
 import 'package:blog/constants.dart';
+import 'package:blog/models/Calendar.dart';
 import 'package:blog/responsive/utilitites.dart';
 import 'package:flutter/material.dart';
 
 class DayTitle extends StatelessWidget {
   final Function onPress;
   final int day;
-  const DayTitle(this.onPress, this.day, {Key? key}) : super(key: key);
+  final Calendar calendar;
+
+  const DayTitle(this.onPress, this.day, this.calendar, {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +23,7 @@ class DayTitle extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: Text(
-                '$day $mes $year',
+                '$day ${calendar.month} ${calendar.year}',
                 style: TextStyle(
                   color: blue,
                   fontSize: 27,

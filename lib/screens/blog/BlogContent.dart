@@ -1,4 +1,5 @@
 import 'package:blog/constants.dart';
+import 'package:blog/models/Calendar.dart';
 import 'package:blog/models/Day.dart';
 import 'package:blog/models/FloatingOption.dart';
 import 'package:blog/models/Memory.dart';
@@ -28,15 +29,18 @@ class BlogContentState extends State<BlogContent> {
   bool showOptions = false;
   bool editionMode = false;
   Function? closeThis;
+  bool error = false;
   late TextEditingController controller;
   late Day selectedDay;
   late Month month;
   late String uneditedText;
+  late Calendar calendar;
   @override
   void initState() {
     final args = loadCurrentData();
     month = args.month;
     selectedDay = args.day;
+    calendar = args.calendar;
     uneditedText = selectedDay.exist ? selectedDay.memory!.content : "";
     controller = TextEditingController(text: uneditedText);
     super.initState();
@@ -180,15 +184,25 @@ class BlogContentState extends State<BlogContent> {
     }
   }
 
-  void _crearNuevo() {
-    this.setState(() {
-      showCalendar = false;
-      showOptions = false;
-      selectedDay.exist = true;
-      selectedDay.memory = new Memory(false, "What's on your mind?");
-      controller.text = "What's on your mind?";
-      editionMode = true;
-    });
+  void _crearNuevo() async {
+    if (isAfter(calendar, selectedDay)) {
+      this.setState(() {
+        error = true;
+      });
+      await Future.delayed(Duration(seconds: 5));
+      this.setState(() {
+        error = false;
+      });
+    } else {
+      this.setState(() {
+        showCalendar = false;
+        showOptions = false;
+        selectedDay.exist = true;
+        selectedDay.memory = new Memory(false, "What's on your mind?");
+        controller.text = "What's on your mind?";
+        editionMode = true;
+      });
+    }
   }
 
   void _setDay(int selected) {
@@ -204,7 +218,34 @@ class BlogContentState extends State<BlogContent> {
     });
   }
 
-  List<Widget> webWidgets(double width) => [];
+  void _changeMonth(int index) {
+    final indexCurrentMonth = months.indexOf(calendar.month) + 1;
+    var newCalendar;
+    if (index == 1) {
+      if (indexCurrentMonth == DateTime.december) {
+        newCalendar = new Calendar(calendar.year + 1, months[0], 1);
+      } else {
+        newCalendar = new Calendar(calendar.year, months[indexCurrentMonth], 1);
+      }
+    } else {
+      //go to prev month
+      if (indexCurrentMonth == DateTime.january) {
+        newCalendar = new Calendar(calendar.year - 1, months[11], 1);
+      } else {
+        newCalendar =
+            new Calendar(calendar.year, months[indexCurrentMonth - 2], 1);
+      }
+    }
+    final details = fetchMonthDetails(newCalendar);
+    final newDay = details.day;
+    final newText = newDay.exist ? newDay.memory!.content : "";
+    this.setState(() {
+      month = details.month;
+      selectedDay = newDay;
+      calendar = newCalendar;
+      controller.text = newText;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -228,12 +269,14 @@ class BlogContentState extends State<BlogContent> {
         child: getStackOrRow(
           [
             isWeb
-                ? Calendar(selectedDay, _setDay, month)
+                ? CalendarWidget(
+                    selectedDay, _setDay, month, calendar, _changeMonth)
                 : AnimatedPositioned(
                     top: showCalendar ? 0 : -800,
                     curve: Curves.easeInOut,
                     duration: Duration(seconds: 1),
-                    child: Calendar(selectedDay, _setDay, month),
+                    child: CalendarWidget(
+                        selectedDay, _setDay, month, calendar, _changeMonth),
                   ),
             isWeb
                 ? MemoryContentWeb(
@@ -242,13 +285,19 @@ class BlogContentState extends State<BlogContent> {
                     closeOptions: _closeOptions,
                     editionMode: editionMode,
                     controller: controller,
-                    crearNuevo: _crearNuevo)
+                    crearNuevo: _crearNuevo,
+                    calendar: calendar,
+                    showError: error,
+                  )
                 : AnimatedPositioned(
                     top: showCalendar ? 420 : 80,
                     curve: Curves.easeInOut,
                     duration: Duration(milliseconds: 800),
-                    child: DayTitle(() => _selectOption(OptionName.Calendar),
-                        selectedDay.day),
+                    child: DayTitle(
+                      () => _selectOption(OptionName.Calendar),
+                      selectedDay.day,
+                      calendar,
+                    ),
                   ),
             isWeb
                 ? OptionsWeb(favorite, _selectOption, editionMode)
@@ -264,7 +313,7 @@ class BlogContentState extends State<BlogContent> {
                             editionMode: editionMode,
                             controller: controller,
                           )
-                        : EmptyMemory(_crearNuevo),
+                        : EmptyMemory(_crearNuevo, error),
                   ),
           ],
         ),

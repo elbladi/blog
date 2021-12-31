@@ -37,6 +37,4 @@ List<String> months = [
 ];
 //Routes
 const ContentScreen = 'blog_main';
-
-const String mes = "Diciembre";
-const int year = 2021;
+const ERROR_MESSAGE = "nain, the future is uncertain... isn't it?";
