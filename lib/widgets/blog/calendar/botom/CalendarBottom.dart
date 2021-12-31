@@ -31,7 +31,7 @@ class CalendarBototm extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             DiaSemana(),
-            DiasDeLaSemana(day, setDay, month),
+            DiasDeLaSemana(day, setDay, month, calendar),
             SiguientesMeses(calendar, changeMonth),
           ],
         ),

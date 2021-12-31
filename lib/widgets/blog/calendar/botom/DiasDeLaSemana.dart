@@ -1,4 +1,5 @@
 import 'package:blog/constants.dart';
+import 'package:blog/models/Calendar.dart';
 import 'package:blog/models/Day.dart';
 import 'package:blog/models/Month.dart';
 import 'package:blog/widgets/utilities.dart';
@@ -8,7 +9,9 @@ class DiasDeLaSemana extends StatelessWidget {
   final Day day;
   final Month month;
   final Function setDay;
-  const DiasDeLaSemana(this.day, this.setDay, this.month, {Key? key})
+  final Calendar calendar;
+  const DiasDeLaSemana(this.day, this.setDay, this.month, this.calendar,
+      {Key? key})
       : super(key: key);
 
   Color _getColor(int id) {
@@ -45,7 +48,7 @@ class DiasDeLaSemana extends StatelessWidget {
 
   Map<String, int> getDetails() {
     final monthId = months.indexOf(month.id);
-    final firstDay = new DateTime(2021, monthId + 1, 1);
+    final firstDay = new DateTime(calendar.year, monthId + 1, 1);
     return {
       "weekday": firstDay.weekday,
       "lenght": month.days.length + (firstDay.weekday - 1)
