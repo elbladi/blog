@@ -1,3 +1,4 @@
+import 'package:blog/models/Calendar.dart';
 import 'package:blog/models/Day.dart';
 import 'package:blog/models/Month.dart';
 import 'package:blog/responsive/utilitites.dart';
@@ -10,7 +11,11 @@ class CalendarBototm extends StatelessWidget {
   final Day day;
   final Function setDay;
   final Month month;
-  const CalendarBototm(this.day, this.setDay, this.month, {Key? key})
+  final Calendar calendar;
+  final Function changeMonth;
+  const CalendarBototm(
+      this.day, this.setDay, this.month, this.calendar, this.changeMonth,
+      {Key? key})
       : super(key: key);
 
   @override
@@ -27,7 +32,7 @@ class CalendarBototm extends StatelessWidget {
           children: [
             DiaSemana(),
             DiasDeLaSemana(day, setDay, month),
-            SiguientesMeses(),
+            SiguientesMeses(calendar, changeMonth),
           ],
         ),
       ),

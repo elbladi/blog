@@ -10,6 +10,8 @@ class Month {
 
   static Month getFromDB(String month) {
     //request return...
+    final DB = fromDB();
+    final daysData = DB[month];
     List<Day> days = List.generate(daysData.length, (i) {
       bool exist = daysData[i]["exist"];
       if (exist) {

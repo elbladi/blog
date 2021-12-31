@@ -1,3 +1,4 @@
+import 'package:blog/models/Calendar.dart';
 import 'package:blog/models/Day.dart';
 import 'package:blog/models/Month.dart';
 import 'package:blog/responsive/utilitites.dart';
@@ -10,8 +11,11 @@ class CalendarWidget extends StatelessWidget {
   final Day day;
   final Function setDay;
   final Month month;
-  final int year;
-  const CalendarWidget(this.day, this.setDay, this.month, this.year, {Key? key})
+  final Calendar calendar;
+  final Function changeMonth;
+  const CalendarWidget(
+      this.day, this.setDay, this.month, this.calendar, this.changeMonth,
+      {Key? key})
       : super(key: key);
 
   @override
@@ -28,8 +32,8 @@ class CalendarWidget extends StatelessWidget {
         height: isWeb ? double.infinity : height - height * 0.5,
         child: Stack(
           children: [
-            CalendarTop(year, "Diciembre"),
-            CalendarBototm(day, setDay, month),
+            CalendarTop(calendar.year, calendar.month),
+            CalendarBototm(day, setDay, month, calendar, changeMonth),
             Ligas(),
           ],
         ),

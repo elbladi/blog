@@ -207,7 +207,34 @@ class BlogContentState extends State<BlogContent> {
     });
   }
 
-  List<Widget> webWidgets(double width) => [];
+  void _changeMonth(int index) {
+    final indexCurrentMonth = months.indexOf(calendar.month) + 1;
+    var newCalendar;
+    if (index == 1) {
+      if (indexCurrentMonth == DateTime.december) {
+        newCalendar = new Calendar(calendar.year + 1, months[0], 1);
+      } else {
+        newCalendar = new Calendar(calendar.year, months[indexCurrentMonth], 1);
+      }
+    } else {
+      //go to prev month
+      if (indexCurrentMonth == DateTime.january) {
+        newCalendar = new Calendar(calendar.year - 1, months[11], 1);
+      } else {
+        newCalendar =
+            new Calendar(calendar.year, months[indexCurrentMonth - 2], 1);
+      }
+    }
+    final details = fetchMonthDetails(newCalendar);
+    final newDay = details.day;
+    final newText = newDay.exist ? newDay.memory!.content : "";
+    this.setState(() {
+      month = details.month;
+      selectedDay = newDay;
+      calendar = newCalendar;
+      controller.text = newText;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -231,13 +258,14 @@ class BlogContentState extends State<BlogContent> {
         child: getStackOrRow(
           [
             isWeb
-                ? CalendarWidget(selectedDay, _setDay, month, calendar.year)
+                ? CalendarWidget(
+                    selectedDay, _setDay, month, calendar, _changeMonth)
                 : AnimatedPositioned(
                     top: showCalendar ? 0 : -800,
                     curve: Curves.easeInOut,
                     duration: Duration(seconds: 1),
                     child: CalendarWidget(
-                        selectedDay, _setDay, month, calendar.year),
+                        selectedDay, _setDay, month, calendar, _changeMonth),
                   ),
             isWeb
                 ? MemoryContentWeb(
