@@ -29,6 +29,7 @@ class BlogContentState extends State<BlogContent> {
   bool showOptions = false;
   bool editionMode = false;
   Function? closeThis;
+  bool error = false;
   late TextEditingController controller;
   late Day selectedDay;
   late Month month;
@@ -183,15 +184,25 @@ class BlogContentState extends State<BlogContent> {
     }
   }
 
-  void _crearNuevo() {
-    this.setState(() {
-      showCalendar = false;
-      showOptions = false;
-      selectedDay.exist = true;
-      selectedDay.memory = new Memory(false, "What's on your mind?");
-      controller.text = "What's on your mind?";
-      editionMode = true;
-    });
+  void _crearNuevo() async {
+    if (isAfter(calendar, selectedDay)) {
+      this.setState(() {
+        error = true;
+      });
+      await Future.delayed(Duration(seconds: 5));
+      this.setState(() {
+        error = false;
+      });
+    } else {
+      this.setState(() {
+        showCalendar = false;
+        showOptions = false;
+        selectedDay.exist = true;
+        selectedDay.memory = new Memory(false, "What's on your mind?");
+        controller.text = "What's on your mind?";
+        editionMode = true;
+      });
+    }
   }
 
   void _setDay(int selected) {
@@ -275,7 +286,9 @@ class BlogContentState extends State<BlogContent> {
                     editionMode: editionMode,
                     controller: controller,
                     crearNuevo: _crearNuevo,
-                    calendar: calendar)
+                    calendar: calendar,
+                    showError: error,
+                  )
                 : AnimatedPositioned(
                     top: showCalendar ? 420 : 80,
                     curve: Curves.easeInOut,
@@ -300,7 +313,7 @@ class BlogContentState extends State<BlogContent> {
                             editionMode: editionMode,
                             controller: controller,
                           )
-                        : EmptyMemory(_crearNuevo),
+                        : EmptyMemory(_crearNuevo, error),
                   ),
           ],
         ),

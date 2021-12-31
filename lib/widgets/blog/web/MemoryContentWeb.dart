@@ -13,17 +13,18 @@ class MemoryContentWeb extends StatelessWidget {
   final Day selectedDay;
   final bool editionMode;
   final Calendar calendar;
+  final bool showError;
   final TextEditingController controller;
 
-  MemoryContentWeb({
-    required this.selectOption,
-    required this.selectedDay,
-    required this.closeOptions,
-    required this.editionMode,
-    required this.controller,
-    required this.crearNuevo,
-    required this.calendar,
-  });
+  MemoryContentWeb(
+      {required this.selectOption,
+      required this.selectedDay,
+      required this.closeOptions,
+      required this.editionMode,
+      required this.controller,
+      required this.crearNuevo,
+      required this.calendar,
+      required this.showError});
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +48,17 @@ class MemoryContentWeb extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
               child: Image(image: AssetImage('assets/emptines.gif')),
             ),
+          AnimatedCrossFade(
+            firstChild: SizedBox(),
+            secondChild:
+                Text(ERROR_MESSAGE, style: TextStyle(color: red, fontSize: 30)),
+            crossFadeState: showError
+                ? CrossFadeState.showSecond
+                : CrossFadeState.showFirst,
+            firstCurve: Curves.easeInOut,
+            secondCurve: Curves.easeInOut,
+            duration: Duration(milliseconds: 500),
+          ),
           if (!selectedDay.exist) SizedBox(height: 40),
           if (!selectedDay.exist)
             GestureDetector(

@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 
 class EmptyMemory extends StatelessWidget {
   final Function _crearNuevo;
-  const EmptyMemory(this._crearNuevo, {Key? key}) : super(key: key);
+  final bool showError;
+  const EmptyMemory(this._crearNuevo, this.showError, {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +22,16 @@ class EmptyMemory extends StatelessWidget {
               image: AssetImage('assets/emptines.gif'),
             ),
           ),
+        ),
+        AnimatedCrossFade(
+          firstChild: SizedBox(width: width),
+          secondChild:
+              Text(ERROR_MESSAGE, style: TextStyle(color: red, fontSize: 25)),
+          crossFadeState:
+              showError ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+          firstCurve: Curves.easeInOut,
+          secondCurve: Curves.easeInOut,
+          duration: Duration(milliseconds: 500),
         ),
         SizedBox(height: 40),
         GestureDetector(
