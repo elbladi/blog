@@ -20,15 +20,16 @@ class Calendar extends StatelessWidget {
     final height = size.height;
 
     return Container(
-      margin: EdgeInsets.only(top: 50),
+      margin:
+          isWeb ? EdgeInsets.only(left: 20, top: 20) : EdgeInsets.only(top: 50),
       child: Container(
         width: isWeb ? 316 : width,
-        height: height - height * 0.5,
+        height: isWeb ? double.infinity : height - height * 0.5,
         child: Stack(
           children: [
             CalendarTop(),
-            // CalendarBototm(day, setDay, month),
-            // Ligas(),
+            CalendarBototm(day, setDay, month),
+            Ligas(),
           ],
         ),
       ),
