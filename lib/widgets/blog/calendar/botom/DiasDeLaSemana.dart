@@ -95,7 +95,7 @@ class DiasDeLaSemana extends StatelessWidget {
                           )
                         : GestureDetector(
                             onTap: () {
-                              setDay(i - 1);
+                              setDay(i + 1 - startAt);
                             },
                             child: Container(
                               margin: const EdgeInsets.only(left: 8),
