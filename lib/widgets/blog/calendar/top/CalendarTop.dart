@@ -19,26 +19,29 @@ class CalendarTop extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                bottomLeft: Radius.circular(20),
+          GestureDetector(
+            onTap: () => setYear(year),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  bottomLeft: Radius.circular(20),
+                ),
+                color: red,
               ),
-              color: red,
+              width: isWeb ? 65 : width * 0.2,
+              height: 74,
+              child: Center(
+                  child: RotatedBox(
+                      quarterTurns: 3,
+                      child: Text(
+                        year.toString(),
+                        style: TextStyle(
+                          color: green,
+                          fontSize: 22,
+                        ),
+                      ))),
             ),
-            width: isWeb ? 65 : width * 0.2,
-            height: 74,
-            child: Center(
-                child: RotatedBox(
-                    quarterTurns: 3,
-                    child: Text(
-                      year.toString(),
-                      style: TextStyle(
-                        color: green,
-                        fontSize: 22,
-                      ),
-                    ))),
           ),
           Expanded(
             child: GestureDetector(

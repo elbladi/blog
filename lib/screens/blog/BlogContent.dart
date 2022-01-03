@@ -237,15 +237,7 @@ class BlogContentState extends State<BlogContent> {
             new Calendar(calendar.year, months[indexCurrentMonth - 2], 1);
       }
     }
-    final details = fetchMonthDetails(newCalendar);
-    final newDay = details.day;
-    final newText = newDay.exist ? newDay.memory!.content : "";
-    this.setState(() {
-      month = details.month;
-      selectedDay = newDay;
-      calendar = newCalendar;
-      controller.text = newText;
-    });
+    _fetchNewInfo(newCalendar);
   }
 
   void _setToday() {
@@ -261,12 +253,27 @@ class BlogContentState extends State<BlogContent> {
   }
 
   void _setMonth(String month) {
-    showAnimatedDialog(context, Modal(month, _selectedMonth));
+    showAnimatedDialog(
+        context, Modal(month: month, selectMonth: _selectedMonth));
   }
 
   void _selectedMonth(String monthSelected) {
     Calendar newCalendar =
         new Calendar(calendar.year, monthSelected, selectedDay.day);
+    _fetchNewInfo(newCalendar);
+  }
+
+  void _setYear(int year) {
+    showAnimatedDialog(context, Modal(year: year, selectYear: _changeYear));
+  }
+
+  void _changeYear(int newYear) {
+    Calendar newCalendar =
+        new Calendar(newYear, calendar.month, selectedDay.day);
+    _fetchNewInfo(newCalendar);
+  }
+
+  void _fetchNewInfo(Calendar newCalendar) {
     final details = fetchMonthDetails(newCalendar);
     final newDay = details.day;
     final newText = newDay.exist ? newDay.memory!.content : "";
@@ -277,8 +284,6 @@ class BlogContentState extends State<BlogContent> {
       controller.text = newText;
     });
   }
-
-  void _setYear() {}
 
   @override
   Widget build(BuildContext context) {
