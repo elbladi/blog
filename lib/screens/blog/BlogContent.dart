@@ -247,6 +247,18 @@ class BlogContentState extends State<BlogContent> {
     });
   }
 
+  void _setToday() {
+    final details = loadCurrentData();
+    final newDay = details.day;
+    final newText = newDay.exist ? newDay.memory!.content : "";
+    this.setState(() {
+      month = details.month;
+      selectedDay = newDay;
+      calendar = details.calendar;
+      controller.text = newText;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -269,14 +281,14 @@ class BlogContentState extends State<BlogContent> {
         child: getStackOrRow(
           [
             isWeb
-                ? CalendarWidget(
-                    selectedDay, _setDay, month, calendar, _changeMonth)
+                ? CalendarWidget(selectedDay, _setDay, month, calendar,
+                    _changeMonth, _setToday)
                 : AnimatedPositioned(
                     top: showCalendar ? 0 : -800,
                     curve: Curves.easeInOut,
                     duration: Duration(seconds: 1),
-                    child: CalendarWidget(
-                        selectedDay, _setDay, month, calendar, _changeMonth),
+                    child: CalendarWidget(selectedDay, _setDay, month, calendar,
+                        _changeMonth, _setToday),
                   ),
             isWeb
                 ? MemoryContentWeb(

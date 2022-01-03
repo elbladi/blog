@@ -5,7 +5,9 @@ import 'package:blog/constants.dart';
 class SiguientesMeses extends StatelessWidget {
   final Calendar calendar;
   final Function changeMonth;
-  const SiguientesMeses(this.calendar, this.changeMonth, {Key? key})
+  final Function setToday;
+  const SiguientesMeses(this.calendar, this.changeMonth, this.setToday,
+      {Key? key})
       : super(key: key);
 
   List<String> _getMonths() {
@@ -42,6 +44,16 @@ class SiguientesMeses extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _getText(_months[0], 0),
+          GestureDetector(
+            onTap: () => setToday(),
+            child: Text(
+              "hoy",
+              style: TextStyle(
+                color: blue,
+                fontSize: 13,
+              ),
+            ),
+          ),
           _getText(_months[1], 1),
         ],
       ),

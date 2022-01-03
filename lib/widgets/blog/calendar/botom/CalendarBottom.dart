@@ -13,8 +13,9 @@ class CalendarBototm extends StatelessWidget {
   final Month month;
   final Calendar calendar;
   final Function changeMonth;
-  const CalendarBototm(
-      this.day, this.setDay, this.month, this.calendar, this.changeMonth,
+  final Function setToday;
+  const CalendarBototm(this.day, this.setDay, this.month, this.calendar,
+      this.changeMonth, this.setToday,
       {Key? key})
       : super(key: key);
 
@@ -32,7 +33,11 @@ class CalendarBototm extends StatelessWidget {
           children: [
             DiaSemana(),
             DiasDeLaSemana(day, setDay, month, calendar),
-            SiguientesMeses(calendar, changeMonth),
+            SiguientesMeses(
+              calendar,
+              changeMonth,
+              setToday,
+            ),
           ],
         ),
       ),
