@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "630230598340",
+    "project_id": "blog-dee95",
+    "storage_bucket": "blog-dee95.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:630230598340:android:c698b969fc96ceb4bebf91",
+        "android_client_info": {
+          "package_name": "com.bladimir.blog"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "630230598340-3e9fvdhmsf058cel9r8ft2ebsu8kn83t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgvDsi2JTNk2rtqDVQuZPAiOb1eG-L_Os"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "630230598340-3e9fvdhmsf058cel9r8ft2ebsu8kn83t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
