@@ -261,14 +261,7 @@ class BlogContentState extends State<BlogContent> {
   }
 
   void _setMonth(String month) {
-    showDialog(
-        context: context,
-        builder: (ctx) {
-          return AlertDialog(
-            title: Center(child: Text('Tons, Cual?')),
-            content: Modal(month, _selectedMonth),
-          );
-        });
+    showAnimatedDialog(context, Modal(month, _selectedMonth));
   }
 
   void _selectedMonth(String monthSelected) {
