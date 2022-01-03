@@ -28,7 +28,7 @@ class _LoginButtonState extends State<LoginButton> {
 
   void _onSubmit(String input) {
     controller.text = "";
-    if (input == "1") Navigator.of(context).pushNamed(ContentScreen);
+    if (input == "1") Navigator.of(context).pushReplacementNamed(LoadingScreen);
   }
 
   Widget _textField() {

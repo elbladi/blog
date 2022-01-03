@@ -1,5 +1,6 @@
 import 'package:blog/constants.dart';
 import 'package:blog/models/Calendar.dart';
+import 'package:blog/models/CurrentData.dart';
 import 'package:blog/models/Day.dart';
 import 'package:blog/models/FloatingOption.dart';
 import 'package:blog/models/Memory.dart';
@@ -38,12 +39,12 @@ class BlogContentState extends State<BlogContent> {
   late Calendar calendar;
   @override
   void initState() {
-    final args = loadCurrentData();
-    month = args.month;
-    selectedDay = args.day;
-    calendar = args.calendar;
-    uneditedText = selectedDay.exist ? selectedDay.memory!.content : "";
-    controller = TextEditingController(text: uneditedText);
+    // final args = await loadCurrentData();
+    // month = args.month;
+    // selectedDay = args.day;
+    // calendar = args.calendar;
+    // uneditedText = selectedDay.exist ? selectedDay.memory!.content : "";
+    // controller = TextEditingController(text: uneditedText);
     super.initState();
   }
 
@@ -240,16 +241,20 @@ class BlogContentState extends State<BlogContent> {
     _fetchNewInfo(newCalendar);
   }
 
-  void _setToday() {
-    final details = loadCurrentData();
-    final newDay = details.day;
-    final newText = newDay.exist ? newDay.memory!.content : "";
-    this.setState(() {
-      month = details.month;
-      selectedDay = newDay;
-      calendar = details.calendar;
-      controller.text = newText;
-    });
+  void _setToday() async {
+    try {
+      final details = await loadCurrentData();
+      final newDay = details.day;
+      final newText = newDay.exist ? newDay.memory!.content : "";
+      this.setState(() {
+        month = details.month;
+        selectedDay = newDay;
+        calendar = details.calendar;
+        controller.text = newText;
+      });
+    } catch (e) {
+      print("whuuuuut???");
+    }
   }
 
   void _setMonth(String month) {
@@ -273,8 +278,8 @@ class BlogContentState extends State<BlogContent> {
     _fetchNewInfo(newCalendar);
   }
 
-  void _fetchNewInfo(Calendar newCalendar) {
-    final details = fetchMonthDetails(newCalendar);
+  void _fetchNewInfo(Calendar newCalendar) async {
+    final details = await fetchMonthDetails(newCalendar);
     final newDay = details.day;
     final newText = newDay.exist ? newDay.memory!.content : "";
     this.setState(() {
@@ -287,6 +292,12 @@ class BlogContentState extends State<BlogContent> {
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as CurrentData;
+    month = args.month;
+    selectedDay = args.day;
+    calendar = args.calendar;
+    uneditedText = selectedDay.exist ? selectedDay.memory!.content : "";
+    controller = TextEditingController(text: uneditedText);
     final size = MediaQuery.of(context).size;
     final width = size.width;
     bool favorite = getFavourite(selectedDay);

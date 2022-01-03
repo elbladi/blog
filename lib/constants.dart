@@ -37,4 +37,5 @@ List<String> months = [
 ];
 //Routes
 const ContentScreen = 'blog_main';
+const LoadingScreen = 'loading';
 const ERROR_MESSAGE = "nain, the future is uncertain... isn't it?";

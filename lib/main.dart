@@ -1,9 +1,16 @@
+import 'package:blog/screens/Loading.dart';
 import 'package:blog/screens/blog/BlogContent.dart';
 import 'package:blog/screens/login/LoginScreen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:blog/constants.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(MyApp());
 }
 
@@ -28,6 +35,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => LoginScreen(),
         ContentScreen: (ctx) => BlogContent(),
+        LoadingScreen: (ctx) => LoadingWidget(),
       },
     );
   }

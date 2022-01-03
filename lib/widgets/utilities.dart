@@ -1,9 +1,11 @@
 import 'package:blog/constants.dart';
 import 'package:blog/models/Calendar.dart';
 import 'package:blog/models/Day.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 enum Size { small, medium, large }
+FirebaseFirestore get instance => FirebaseFirestore.instance;
 
 double getWidth(double width, Size size) {
   switch (size) {
