@@ -5,7 +5,11 @@ import 'package:blog/constants.dart';
 class CalendarTop extends StatelessWidget {
   final String month;
   final int year;
-  const CalendarTop(this.year, this.month, {Key? key}) : super(key: key);
+  final Function setMonth;
+  final Function setYear;
+  const CalendarTop(this.year, this.month, this.setMonth, this.setYear,
+      {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,26 +41,29 @@ class CalendarTop extends StatelessWidget {
                     ))),
           ),
           Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(20),
-                  bottomRight: Radius.circular(20),
+            child: GestureDetector(
+              onTap: () => setMonth(month),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  ),
+                  color: blue,
                 ),
-                color: blue,
-              ),
-              width: width * 0.5,
-              height: 74,
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: FittedBox(
-                    fit: BoxFit.fitWidth,
-                    child: new Text(
-                      month,
-                      style: TextStyle(
-                        color: green,
-                        fontSize: 44,
+                width: width * 0.5,
+                height: 74,
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: FittedBox(
+                      fit: BoxFit.fitWidth,
+                      child: new Text(
+                        month,
+                        style: TextStyle(
+                          color: green,
+                          fontSize: 44,
+                        ),
                       ),
                     ),
                   ),

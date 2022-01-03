@@ -7,6 +7,7 @@ import 'package:blog/models/Month.dart';
 import 'package:blog/responsive/utilitites.dart';
 import 'package:blog/service/login.dart';
 import 'package:blog/widgets/blog/calendar/Calendar.dart';
+import 'package:blog/widgets/blog/calendar/Modal.dart';
 import 'package:blog/widgets/blog/empty/EmptyMemory.dart';
 import 'package:blog/widgets/blog/text/ContentText.dart';
 import 'package:blog/widgets/blog/title/DayTitle.dart';
@@ -259,6 +260,33 @@ class BlogContentState extends State<BlogContent> {
     });
   }
 
+  void _setMonth(String month) {
+    showDialog(
+        context: context,
+        builder: (ctx) {
+          return AlertDialog(
+            title: Center(child: Text('Tons, Cual?')),
+            content: Modal(month, _selectedMonth),
+          );
+        });
+  }
+
+  void _selectedMonth(String monthSelected) {
+    Calendar newCalendar =
+        new Calendar(calendar.year, monthSelected, selectedDay.day);
+    final details = fetchMonthDetails(newCalendar);
+    final newDay = details.day;
+    final newText = newDay.exist ? newDay.memory!.content : "";
+    this.setState(() {
+      month = details.month;
+      selectedDay = newDay;
+      calendar = newCalendar;
+      controller.text = newText;
+    });
+  }
+
+  void _setYear() {}
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -282,13 +310,13 @@ class BlogContentState extends State<BlogContent> {
           [
             isWeb
                 ? CalendarWidget(selectedDay, _setDay, month, calendar,
-                    _changeMonth, _setToday)
+                    _changeMonth, _setToday, _setMonth, _setYear)
                 : AnimatedPositioned(
                     top: showCalendar ? 0 : -800,
                     curve: Curves.easeInOut,
                     duration: Duration(seconds: 1),
                     child: CalendarWidget(selectedDay, _setDay, month, calendar,
-                        _changeMonth, _setToday),
+                        _changeMonth, _setToday, _setMonth, _setYear),
                   ),
             isWeb
                 ? MemoryContentWeb(

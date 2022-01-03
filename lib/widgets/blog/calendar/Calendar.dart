@@ -14,8 +14,10 @@ class CalendarWidget extends StatelessWidget {
   final Calendar calendar;
   final Function changeMonth;
   final Function setToday;
+  final Function setMonth;
+  final Function setYear;
   const CalendarWidget(this.day, this.setDay, this.month, this.calendar,
-      this.changeMonth, this.setToday,
+      this.changeMonth, this.setToday, this.setMonth, this.setYear,
       {Key? key})
       : super(key: key);
 
@@ -33,7 +35,7 @@ class CalendarWidget extends StatelessWidget {
         height: isWeb ? double.infinity : height - height * 0.5,
         child: Stack(
           children: [
-            CalendarTop(calendar.year, calendar.month),
+            CalendarTop(calendar.year, calendar.month, setMonth, setYear),
             CalendarBototm(day, setDay, month, calendar, changeMonth, setToday),
             Ligas(),
           ],
