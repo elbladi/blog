@@ -6,7 +6,9 @@ import 'package:blog/models/FloatingOption.dart';
 import 'package:blog/models/Memory.dart';
 import 'package:blog/models/Month.dart';
 import 'package:blog/responsive/utilitites.dart';
+import 'package:blog/service/blogs.dart';
 import 'package:blog/service/login.dart';
+import 'package:blog/store/store.dart';
 import 'package:blog/widgets/blog/calendar/Calendar.dart';
 import 'package:blog/widgets/blog/calendar/Modal.dart';
 import 'package:blog/widgets/blog/empty/EmptyMemory.dart';
@@ -39,12 +41,12 @@ class BlogContentState extends State<BlogContent> {
   late Calendar calendar;
   @override
   void initState() {
-    // final args = await loadCurrentData();
-    // month = args.month;
-    // selectedDay = args.day;
-    // calendar = args.calendar;
-    // uneditedText = selectedDay.exist ? selectedDay.memory!.content : "";
-    // controller = TextEditingController(text: uneditedText);
+    CurrentData data = Redux.store.state.blogState.currentData;
+    month = data.month;
+    selectedDay = data.day;
+    calendar = data.calendar;
+    uneditedText = selectedDay.exist ? selectedDay.memory!.content : "";
+    controller = TextEditingController(text: uneditedText);
     super.initState();
   }
 
@@ -74,7 +76,7 @@ class BlogContentState extends State<BlogContent> {
       ..show();
   }
 
-  void _processResponse(DismissType type, String title) {
+  void _processResponse(DismissType type, String title) async {
     if (title == "Cancelar" && type == DismissType.BTN_CANCEL) {
       this.setState(() {
         editionMode = false;
@@ -90,21 +92,28 @@ class BlogContentState extends State<BlogContent> {
           selectedDay.memory = null;
         });
       } else {
-        this.setState(() {
-          editionMode = false;
-          if (_contentExist) {
-            selectedDay.memory!.content = controller.text;
-          } else {
+        if (_contentExist) {
+          try {
+            await updateBlog(controller.text, calendar, selectedDay.day,
+                selectedDay.memory!.favorite);
+            this.setState(() {
+              editionMode = false;
+              selectedDay.memory!.content = controller.text;
+            });
+          } catch (e) {}
+        } else {
+          this.setState(() {
+            editionMode = false;
             selectedDay.memory = new Memory(false, controller.text);
-          }
-        });
+          });
+        }
       }
     }
   }
 
   bool get _contentExist => selectedDay.exist;
 
-  void _selectOption(OptionName id) {
+  void _selectOption(OptionName id) async {
     switch (id) {
       case OptionName.Calendar:
         _closeOptions();
@@ -144,6 +153,7 @@ class BlogContentState extends State<BlogContent> {
         break;
       case OptionName.NoFavorite:
         if (_contentExist) {
+          await updateFav(calendar.year, calendar.month, selectedDay.day, true);
           this.setState(() {
             selectedDay.memory!.favorite = true;
           });
@@ -151,6 +161,8 @@ class BlogContentState extends State<BlogContent> {
         break;
       case OptionName.Favorite:
         if (_contentExist) {
+          await updateFav(
+              calendar.year, calendar.month, selectedDay.day, false);
           this.setState(() {
             selectedDay.memory!.favorite = false;
           });
@@ -158,6 +170,7 @@ class BlogContentState extends State<BlogContent> {
         break;
       case OptionName.Delete:
         if (_contentExist) {
+          await deleteMemory(calendar.year, calendar.month, selectedDay.day);
           this.setState(() {
             selectedDay.exist = false;
             selectedDay.memory = null;
@@ -292,12 +305,6 @@ class BlogContentState extends State<BlogContent> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as CurrentData;
-    month = args.month;
-    selectedDay = args.day;
-    calendar = args.calendar;
-    uneditedText = selectedDay.exist ? selectedDay.memory!.content : "";
-    controller = TextEditingController(text: uneditedText);
     final size = MediaQuery.of(context).size;
     final width = size.width;
     bool favorite = getFavourite(selectedDay);

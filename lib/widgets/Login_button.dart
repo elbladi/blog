@@ -5,7 +5,8 @@ import 'package:flutter_svg/svg.dart';
 
 class LoginButton extends StatefulWidget {
   final String text;
-  LoginButton(this.text);
+  final Function onSubmit;
+  LoginButton(this.text, this.onSubmit);
 
   @override
   _LoginButtonState createState() => _LoginButtonState();
@@ -28,7 +29,7 @@ class _LoginButtonState extends State<LoginButton> {
 
   void _onSubmit(String input) {
     controller.text = "";
-    if (input == "1") Navigator.of(context).pushReplacementNamed(LoadingScreen);
+    widget.onSubmit();
   }
 
   Widget _textField() {

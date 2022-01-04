@@ -7,7 +7,6 @@ Future<CurrentData> loadCurrentData() async {
     final calendar = Calendar.getToday();
     final month = await Month.getFromDB(calendar);
     final today = month.days.firstWhere((dia) => dia.day == calendar.day);
-    await Future.delayed(Duration(seconds: 3));
     return new CurrentData(calendar, month, today);
   } catch (e) {
     throw e;
