@@ -113,7 +113,7 @@ class BlogContentState extends State<BlogContent> {
 
   bool get _contentExist => selectedDay.exist;
 
-  void _selectOption(OptionName id) {
+  void _selectOption(OptionName id) async {
     switch (id) {
       case OptionName.Calendar:
         _closeOptions();
@@ -153,6 +153,7 @@ class BlogContentState extends State<BlogContent> {
         break;
       case OptionName.NoFavorite:
         if (_contentExist) {
+          await updateFav(calendar.year, calendar.month, selectedDay.day, true);
           this.setState(() {
             selectedDay.memory!.favorite = true;
           });
@@ -160,6 +161,8 @@ class BlogContentState extends State<BlogContent> {
         break;
       case OptionName.Favorite:
         if (_contentExist) {
+          await updateFav(
+              calendar.year, calendar.month, selectedDay.day, false);
           this.setState(() {
             selectedDay.memory!.favorite = false;
           });
@@ -167,6 +170,7 @@ class BlogContentState extends State<BlogContent> {
         break;
       case OptionName.Delete:
         if (_contentExist) {
+          await deleteMemory(calendar.year, calendar.month, selectedDay.day);
           this.setState(() {
             selectedDay.exist = false;
             selectedDay.memory = null;
