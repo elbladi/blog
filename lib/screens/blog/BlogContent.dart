@@ -6,7 +6,9 @@ import 'package:blog/models/FloatingOption.dart';
 import 'package:blog/models/Memory.dart';
 import 'package:blog/models/Month.dart';
 import 'package:blog/responsive/utilitites.dart';
+import 'package:blog/service/blogs.dart';
 import 'package:blog/service/login.dart';
+import 'package:blog/store/store.dart';
 import 'package:blog/widgets/blog/calendar/Calendar.dart';
 import 'package:blog/widgets/blog/calendar/Modal.dart';
 import 'package:blog/widgets/blog/empty/EmptyMemory.dart';
@@ -39,12 +41,12 @@ class BlogContentState extends State<BlogContent> {
   late Calendar calendar;
   @override
   void initState() {
-    // final args = await loadCurrentData();
-    // month = args.month;
-    // selectedDay = args.day;
-    // calendar = args.calendar;
-    // uneditedText = selectedDay.exist ? selectedDay.memory!.content : "";
-    // controller = TextEditingController(text: uneditedText);
+    CurrentData data = Redux.store.state.blogState.currentData;
+    month = data.month;
+    selectedDay = data.day;
+    calendar = data.calendar;
+    uneditedText = selectedDay.exist ? selectedDay.memory!.content : "";
+    controller = TextEditingController(text: uneditedText);
     super.initState();
   }
 
@@ -93,6 +95,7 @@ class BlogContentState extends State<BlogContent> {
         this.setState(() {
           editionMode = false;
           if (_contentExist) {
+            // updateBlog(controller.text, calendar, selectedDay.day);
             selectedDay.memory!.content = controller.text;
           } else {
             selectedDay.memory = new Memory(false, controller.text);
@@ -292,12 +295,6 @@ class BlogContentState extends State<BlogContent> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as CurrentData;
-    month = args.month;
-    selectedDay = args.day;
-    calendar = args.calendar;
-    uneditedText = selectedDay.exist ? selectedDay.memory!.content : "";
-    controller = TextEditingController(text: uneditedText);
     final size = MediaQuery.of(context).size;
     final width = size.width;
     bool favorite = getFavourite(selectedDay);
