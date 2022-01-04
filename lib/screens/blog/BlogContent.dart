@@ -76,7 +76,7 @@ class BlogContentState extends State<BlogContent> {
       ..show();
   }
 
-  void _processResponse(DismissType type, String title) {
+  void _processResponse(DismissType type, String title) async {
     if (title == "Cancelar" && type == DismissType.BTN_CANCEL) {
       this.setState(() {
         editionMode = false;
@@ -92,15 +92,21 @@ class BlogContentState extends State<BlogContent> {
           selectedDay.memory = null;
         });
       } else {
-        this.setState(() {
-          editionMode = false;
-          if (_contentExist) {
-            // updateBlog(controller.text, calendar, selectedDay.day);
-            selectedDay.memory!.content = controller.text;
-          } else {
+        if (_contentExist) {
+          try {
+            await updateBlog(controller.text, calendar, selectedDay.day,
+                selectedDay.memory!.favorite);
+            this.setState(() {
+              editionMode = false;
+              selectedDay.memory!.content = controller.text;
+            });
+          } catch (e) {}
+        } else {
+          this.setState(() {
+            editionMode = false;
             selectedDay.memory = new Memory(false, controller.text);
-          }
-        });
+          });
+        }
       }
     }
   }

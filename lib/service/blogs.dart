@@ -1,12 +1,12 @@
 import 'package:blog/models/Calendar.dart';
 import 'package:blog/widgets/utilities.dart';
 
-void updateBlog(String content, Calendar calendar, int day) async {
+Future<void> updateBlog(
+    String content, Calendar calendar, int day, bool fav) async {
   final ref = instance
       .collection(calendar.year.toString())
       .doc(calendar.month.toLowerCase());
 
-  print("aqui mero?");
   final doc = await ref.get();
   if (doc.exists) {
     List<dynamic> daysData = doc.data()!["days"];
@@ -15,29 +15,11 @@ void updateBlog(String content, Calendar calendar, int day) async {
       //update the shit
     } else {
       day2Update["memory"] = {
-        "favorite": false,
+        "favorite": fav,
         "content": content,
       };
       day2Update["exist"] = true;
-      // final updatedList = List.generate(daysData.length, (i) {
-      //   if(daysData[i]["day"] == day){
-
-      //   }
-      //   return daysData[i];
-      // });
     }
+    await ref.update({"days": daysData});
   }
-
-  // await doc.update({
-  //   "days": FieldValue.arrayUnion([
-  //     {
-  //       "day": day,
-  //       "exist": true,
-  //       "memory": {
-  //         "content": content,
-  //         "favorite": false,
-  //       },
-  //     }
-  //   ])
-  // });
 }
