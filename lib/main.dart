@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
     return StoreProvider(
       store: Redux.store,
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Memories ❤️',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           textTheme: TextTheme(
