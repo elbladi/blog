@@ -318,6 +318,7 @@ class BlogContentState extends State<BlogContent> {
               editionMode,
               favorite,
             ),
+      resizeToAvoidBottomInset: true,
       body: Container(
         color: green,
         height: double.infinity,
