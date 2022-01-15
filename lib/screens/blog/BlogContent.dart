@@ -169,7 +169,24 @@ class BlogContentState extends State<BlogContent> {
         }
         break;
       case OptionName.Delete:
-        if (_contentExist) {
+        if (_contentExist) _askDelete();
+        _closeOptions();
+        break;
+      default:
+        break;
+    }
+  }
+
+  void _askDelete() {
+    AwesomeDialog(
+        context: context,
+        dialogType: DialogType.WARNING,
+        headerAnimationLoop: true,
+        animType: AnimType.SCALE,
+        title: "¿Deseas eliminar memoria?",
+        desc: "Cuidado Goku! Esta accion no se puede revertir",
+        btnOkText: "Eliminar",
+        btnOkOnPress: () async {
           await deleteMemory(calendar.year, calendar.month, selectedDay.day);
           this.setState(() {
             selectedDay.exist = false;
@@ -177,12 +194,11 @@ class BlogContentState extends State<BlogContent> {
             controller.text = "";
             editionMode = false;
           });
-        }
-        _closeOptions();
-        break;
-      default:
-        break;
-    }
+        },
+        buttonsTextStyle: TextStyle(fontSize: 15),
+        btnOkColor: red,
+        onDissmissCallback: (type) {})
+      ..show();
   }
 
   void _setIsOpened(bool val, Function closeThisShit) {
