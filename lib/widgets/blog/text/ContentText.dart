@@ -27,29 +27,25 @@ class _ContentTextState extends State<ContentText> {
     super.dispose();
   }
 
-  void _onT() {
-    print("ont");
-    widget.closeOptions();
-  }
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final width = size.width;
     final height = size.height;
-    final b = MediaQuery.of(context).viewInsets.bottom;
     return GestureDetector(
-      onTap: () => _onT(),
+      onTap: () => widget.closeOptions(),
       child: Container(
         width: width,
-        height: myFocusNode.hasFocus ? 250 : height - height * 0.2,
-        padding: EdgeInsets.only(left: 10, right: 10, bottom: b),
+        height: height - (myFocusNode.hasFocus ? height * 0.5 : 150),
+        padding: EdgeInsets.all(10),
         child: Column(
           children: [
             Expanded(
               child: SingleChildScrollView(
                 child: Container(
                   child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       widget.editionMode
                           ? TextFormField(
@@ -62,7 +58,6 @@ class _ContentTextState extends State<ContentText> {
                                 enabledBorder: InputBorder.none,
                                 disabledBorder: InputBorder.none,
                                 focusedBorder: InputBorder.none,
-                                contentPadding: EdgeInsets.only(bottom: b),
                               ),
                             )
                           : Text(widget.controller.text, style: _textStyle),
@@ -71,19 +66,6 @@ class _ContentTextState extends State<ContentText> {
                 ),
               ),
             ),
-            myFocusNode.hasFocus
-                ? GestureDetector(
-                    onTap: () => FocusScope.of(context).unfocus(),
-                    child: Container(
-                      width: double.infinity,
-                      child: Center(
-                          child: Text(
-                        "Ya",
-                        style: TextStyle(color: transparent),
-                      )),
-                    ),
-                  )
-                : SizedBox(),
           ],
         ),
       ),
