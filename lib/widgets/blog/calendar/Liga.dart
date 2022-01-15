@@ -1,3 +1,4 @@
+import 'package:blog/responsive/utilitites.dart';
 import 'package:flutter/material.dart';
 import 'package:blog/constants.dart';
 
@@ -22,7 +23,7 @@ class Liga extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: 16,
+            top: isWeb ? 23 : 16,
             child: Container(
               //Node Down
               decoration: new BoxDecoration(
@@ -38,7 +39,7 @@ class Liga extends StatelessWidget {
             left: 3,
             child: Container(
               //Bar
-              height: 18,
+              height: isWeb ? 25 : 18,
               width: 7,
               decoration: new BoxDecoration(
                 color: white,

@@ -2,11 +2,11 @@ import 'package:blog/constants.dart';
 import 'package:blog/widgets/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:blog/constants.dart';
 
 class LoginButton extends StatefulWidget {
   final String text;
-  LoginButton(this.text);
+  final Function onSubmit;
+  LoginButton(this.text, this.onSubmit);
 
   @override
   _LoginButtonState createState() => _LoginButtonState();
@@ -29,7 +29,7 @@ class _LoginButtonState extends State<LoginButton> {
 
   void _onSubmit(String input) {
     controller.text = "";
-    if (input == "1") Navigator.of(context).pushNamed(ContentScreen);
+    widget.onSubmit();
   }
 
   Widget _textField() {
@@ -40,6 +40,8 @@ class _LoginButtonState extends State<LoginButton> {
       child: Padding(
         padding: EdgeInsets.only(top: 20, left: 100),
         child: TextField(
+          style: TextStyle(color: white),
+          keyboardType: TextInputType.number,
           decoration: const InputDecoration(
             enabledBorder: InputBorder.none,
             disabledBorder: InputBorder.none,

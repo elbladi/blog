@@ -28,10 +28,21 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutter_svg: 0.21.0
+  awesome_dialog: ^2.1.1
+  firebase_core: ^1.10.6
+  cloud_firestore: ^3.1.5
+  flutter_redux: ^0.8.2
+  redux: ^5.0.0
 
 dev_dependencies:
+  flutter_launcher_icons: "^0.9.2"
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: true
+  ios: false
+  image_path: "assets/logo.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -63,6 +74,10 @@ flutter:
     - family: Peralta
       fonts:
         - asset: fonts/Peralta-Regular.ttf
+          style: italic
+    - family: PermanentMarker
+      fonts:
+        - asset: fonts/PermanentMarker-Regular.ttf
           style: italic
   #   - family: Trajan Pro
   #     fonts:

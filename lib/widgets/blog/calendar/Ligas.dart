@@ -1,3 +1,4 @@
+import 'package:blog/responsive/utilitites.dart';
 import 'package:blog/widgets/blog/calendar/Liga.dart';
 import 'package:flutter/material.dart';
 
@@ -8,10 +9,10 @@ class Ligas extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     return Positioned(
-      left: 90,
+      left: isWeb ? 37 : 90,
       top: 60,
       child: Container(
-        width: width - 150,
+        width: isWeb ? 240 : width - 150,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: List.generate(6, (i) => Liga()).toList(),
