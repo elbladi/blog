@@ -1,5 +1,6 @@
 import 'package:blog/constants.dart';
 import 'package:blog/models/CurrentData.dart';
+import 'package:blog/screens/ErrorScreen.dart';
 import 'package:blog/service/login.dart';
 import 'package:blog/store/actions/blog_action.dart';
 import 'package:blog/store/states/blog_state.dart';
@@ -41,12 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
               : FutureBuilder(
                   future: loadCurrentData(),
                   builder: (ctx, AsyncSnapshot<CurrentData> snapshot) {
-                    if (snapshot.hasError) {
-                      this.setState(() {
-                        loading = false;
-                      });
-                      return SizedBox();
-                    }
+                    if (snapshot.hasError) return ErrorScreen();
                     if (snapshot.connectionState == ConnectionState.done) {
                       return GestureDetector(
                         onTap: () => _onTap(true, snapshot.data),

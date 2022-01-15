@@ -18,6 +18,13 @@ class ContentText extends StatefulWidget {
 
 class _ContentTextState extends State<ContentText> {
   TextStyle get _textStyle => TextStyle(fontSize: 17, fontFamily: "Montserrat");
+  FocusNode myFocusNode = FocusNode();
+
+  @override
+  void dispose() {
+    myFocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,32 +35,33 @@ class _ContentTextState extends State<ContentText> {
       onTap: () => widget.closeOptions(),
       child: Container(
         width: width,
-        height: height - height * 0.2,
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        height: height - (myFocusNode.hasFocus ? height * 0.5 : 150),
+        padding: EdgeInsets.all(10),
         child: Column(
           children: [
             Expanded(
               child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    widget.editionMode
-                        ? TextFormField(
-                            style: _textStyle,
-                            textCapitalization: TextCapitalization.sentences,
-                            maxLines: null,
-                            decoration: const InputDecoration(
-                              enabledBorder: InputBorder.none,
-                              disabledBorder: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                            ),
-                            controller: widget.controller,
-                          )
-                        : Text(widget.controller.text, style: _textStyle),
-                    Container(
-                      height: 100,
-                      width: 40,
-                    ),
-                  ],
+                child: Container(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      widget.editionMode
+                          ? TextFormField(
+                              style: _textStyle,
+                              textCapitalization: TextCapitalization.sentences,
+                              maxLines: null,
+                              controller: widget.controller,
+                              focusNode: myFocusNode,
+                              decoration: InputDecoration(
+                                enabledBorder: InputBorder.none,
+                                disabledBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                              ),
+                            )
+                          : Text(widget.controller.text, style: _textStyle),
+                    ],
+                  ),
                 ),
               ),
             ),

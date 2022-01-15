@@ -169,7 +169,24 @@ class BlogContentState extends State<BlogContent> {
         }
         break;
       case OptionName.Delete:
-        if (_contentExist) {
+        if (_contentExist) _askDelete();
+        _closeOptions();
+        break;
+      default:
+        break;
+    }
+  }
+
+  void _askDelete() {
+    AwesomeDialog(
+        context: context,
+        dialogType: DialogType.WARNING,
+        headerAnimationLoop: true,
+        animType: AnimType.SCALE,
+        title: "¿Deseas eliminar memoria?",
+        desc: "Cuidado Goku! Esta accion no se puede revertir",
+        btnOkText: "Eliminar",
+        btnOkOnPress: () async {
           await deleteMemory(calendar.year, calendar.month, selectedDay.day);
           this.setState(() {
             selectedDay.exist = false;
@@ -177,12 +194,11 @@ class BlogContentState extends State<BlogContent> {
             controller.text = "";
             editionMode = false;
           });
-        }
-        _closeOptions();
-        break;
-      default:
-        break;
-    }
+        },
+        buttonsTextStyle: TextStyle(fontSize: 15),
+        btnOkColor: red,
+        onDissmissCallback: (type) {})
+      ..show();
   }
 
   void _setIsOpened(bool val, Function closeThisShit) {
@@ -303,75 +319,117 @@ class BlogContentState extends State<BlogContent> {
     });
   }
 
+  void _logout() {
+    AwesomeDialog(
+        context: context,
+        dialogType: DialogType.QUESTION,
+        headerAnimationLoop: true,
+        animType: AnimType.SCALE,
+        title: "Salir",
+        desc: "¿Deseas salir?",
+        btnOkText: "Simon",
+        btnCancelText: "No",
+        btnOkOnPress: () => Navigator.of(context).pushReplacementNamed("/"),
+        btnCancelColor: red,
+        buttonsTextStyle: TextStyle(fontSize: 15),
+        btnOkColor: blue,
+        btnCancelOnPress: () {},
+        onDissmissCallback: (type) {})
+      ..show();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final width = size.width;
     bool favorite = getFavourite(selectedDay);
-    return Scaffold(
-      floatingActionButton: isWeb
-          ? null
-          : FloatingButton(
-              _selectOption,
-              showOptions,
-              _setIsOpened,
-              editionMode,
-              favorite,
+    return WillPopScope(
+      onWillPop: () async {
+        if (editionMode) FocusScope.of(context).unfocus();
+        return false;
+      },
+      child: Scaffold(
+        floatingActionButton: isWeb
+            ? null
+            : FloatingButton(
+                _selectOption,
+                showOptions,
+                _setIsOpened,
+                editionMode,
+                favorite,
+              ),
+        resizeToAvoidBottomInset: true,
+        body: GestureDetector(
+          onHorizontalDragEnd: (details) {
+            if (details.primaryVelocity != null) {
+              if (details.primaryVelocity! > 1000) {
+                _logout();
+              }
+            }
+          },
+          child: Container(
+            color: green,
+            height: double.infinity,
+            width: width,
+            child: getStackOrRow(
+              [
+                isWeb
+                    ? CalendarWidget(selectedDay, _setDay, month, calendar,
+                        _changeMonth, _setToday, _setMonth, _setYear)
+                    : AnimatedPositioned(
+                        top: showCalendar ? 0 : -800,
+                        curve: Curves.easeInOut,
+                        duration: Duration(seconds: 1),
+                        child: CalendarWidget(
+                            selectedDay,
+                            _setDay,
+                            month,
+                            calendar,
+                            _changeMonth,
+                            _setToday,
+                            _setMonth,
+                            _setYear),
+                      ),
+                isWeb
+                    ? MemoryContentWeb(
+                        selectOption: _selectOption,
+                        selectedDay: selectedDay,
+                        closeOptions: _closeOptions,
+                        editionMode: editionMode,
+                        controller: controller,
+                        crearNuevo: _crearNuevo,
+                        calendar: calendar,
+                        showError: error,
+                      )
+                    : AnimatedPositioned(
+                        top: showCalendar ? 420 : 80,
+                        curve: Curves.easeInOut,
+                        duration: Duration(milliseconds: 800),
+                        child: DayTitle(
+                          () => _selectOption(OptionName.Calendar),
+                          selectedDay.day,
+                          calendar,
+                        ),
+                      ),
+                isWeb
+                    ? OptionsWeb(favorite, _selectOption, editionMode)
+                    : AnimatedPositioned(
+                        curve: Curves.easeInOut,
+                        duration: Duration(milliseconds: 800),
+                        top: showCalendar ? 470 : 140,
+                        width: !showCalendar ? width : width - 100,
+                        left: showCalendar ? 30 : 0,
+                        child: selectedDay.exist
+                            ? ContentText(
+                                closeOptions: _closeOptions,
+                                editionMode: editionMode,
+                                controller: controller,
+                              )
+                            : EmptyMemory(_crearNuevo, error),
+                      ),
+              ],
             ),
-      body: Container(
-        color: green,
-        height: double.infinity,
-        width: width,
-        child: getStackOrRow(
-          [
-            isWeb
-                ? CalendarWidget(selectedDay, _setDay, month, calendar,
-                    _changeMonth, _setToday, _setMonth, _setYear)
-                : AnimatedPositioned(
-                    top: showCalendar ? 0 : -800,
-                    curve: Curves.easeInOut,
-                    duration: Duration(seconds: 1),
-                    child: CalendarWidget(selectedDay, _setDay, month, calendar,
-                        _changeMonth, _setToday, _setMonth, _setYear),
-                  ),
-            isWeb
-                ? MemoryContentWeb(
-                    selectOption: _selectOption,
-                    selectedDay: selectedDay,
-                    closeOptions: _closeOptions,
-                    editionMode: editionMode,
-                    controller: controller,
-                    crearNuevo: _crearNuevo,
-                    calendar: calendar,
-                    showError: error,
-                  )
-                : AnimatedPositioned(
-                    top: showCalendar ? 420 : 80,
-                    curve: Curves.easeInOut,
-                    duration: Duration(milliseconds: 800),
-                    child: DayTitle(
-                      () => _selectOption(OptionName.Calendar),
-                      selectedDay.day,
-                      calendar,
-                    ),
-                  ),
-            isWeb
-                ? OptionsWeb(favorite, _selectOption, editionMode)
-                : AnimatedPositioned(
-                    curve: Curves.easeInOut,
-                    duration: Duration(milliseconds: 800),
-                    top: showCalendar ? 470 : 140,
-                    width: !showCalendar ? width : width - 100,
-                    left: showCalendar ? 30 : 0,
-                    child: selectedDay.exist
-                        ? ContentText(
-                            closeOptions: _closeOptions,
-                            editionMode: editionMode,
-                            controller: controller,
-                          )
-                        : EmptyMemory(_crearNuevo, error),
-                  ),
-          ],
+          ),
         ),
       ),
     );

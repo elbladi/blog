@@ -41,6 +41,7 @@ class _LoginButtonState extends State<LoginButton> {
         padding: EdgeInsets.only(top: 20, left: 100),
         child: TextField(
           style: TextStyle(color: white),
+          keyboardType: TextInputType.number,
           decoration: const InputDecoration(
             enabledBorder: InputBorder.none,
             disabledBorder: InputBorder.none,
