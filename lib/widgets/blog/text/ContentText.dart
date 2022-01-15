@@ -1,4 +1,3 @@
-import 'package:blog/constants.dart';
 import 'package:flutter/material.dart';
 
 class ContentText extends StatefulWidget {
