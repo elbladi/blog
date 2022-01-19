@@ -3,6 +3,7 @@ import 'package:blog/models/FloatingOption.dart';
 import 'package:blog/widgets/floatingButtons/AnimatedFloatingActionButton.dart';
 import 'package:blog/widgets/floatingButtons/options/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:rive/rive.dart';
 import 'options/OptionBubble.dart';
 
 class FloatingButton extends StatefulWidget {
@@ -33,8 +34,16 @@ class _FloatingButtonState extends State<FloatingButton> {
         }
       }
       if (id == OptionName.NoFavorite && widget.favorite) {
-        id = OptionName.Favorite;
-        icon = Icons.favorite;
+        return GestureDetector(
+          onTap: () => widget.onPress(OptionName.Favorite),
+          child: Container(
+            height: 50,
+            width: 50,
+            child: RiveAnimation.asset(
+              'assets/bit.riv',
+            ),
+          ),
+        );
       }
       if (id == OptionName.Favorite && !widget.favorite) {
         id = OptionName.NoFavorite;
