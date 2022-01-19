@@ -400,6 +400,7 @@ class BlogContentState extends State<BlogContent> {
                         crearNuevo: _crearNuevo,
                         calendar: calendar,
                         showError: error,
+                        setDay: _setDay,
                       )
                     : AnimatedPositioned(
                         top: showCalendar ? 420 : 80,
@@ -409,6 +410,7 @@ class BlogContentState extends State<BlogContent> {
                           () => _selectOption(OptionName.Calendar),
                           selectedDay.day,
                           calendar,
+                          _setDay,
                         ),
                       ),
                 isWeb
