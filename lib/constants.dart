@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 Color get green {
-  return const Color.fromRGBO(181, 186, 114, 1);
+  return const Color.fromRGBO(88, 164, 176, 1);
 }
 
 Color get blue {
@@ -9,7 +9,7 @@ Color get blue {
 }
 
 Color get white {
-  return const Color.fromRGBO(255, 255, 255, 1);
+  return const Color.fromRGBO(244, 236, 214, 1);
 }
 
 Color get red {
