@@ -4,6 +4,7 @@ import 'package:blog/models/Day.dart';
 import 'package:blog/models/Month.dart';
 import 'package:blog/widgets/utilities.dart';
 import 'package:flutter/material.dart';
+import 'package:rive/rive.dart';
 
 class DiasDeLaSemana extends StatelessWidget {
   final Day day;
@@ -39,10 +40,17 @@ class DiasDeLaSemana extends StatelessWidget {
   }
 
   Widget get _getHearth => Positioned.fill(
-        child: Icon(
-          Icons.favorite,
-          size: 30,
-          color: red,
+        child: Container(
+          height: 30,
+          width: 30,
+          child: RiveAnimation.asset(
+            'assets/bit.riv',
+            placeHolder: Icon(
+              Icons.favorite,
+              size: 30,
+              color: red,
+            ),
+          ),
         ),
       );
 
