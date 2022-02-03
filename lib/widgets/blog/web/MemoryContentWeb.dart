@@ -10,21 +10,24 @@ class MemoryContentWeb extends StatelessWidget {
   final Function selectOption;
   final Function closeOptions;
   final Function crearNuevo;
+  final Function setDay;
   final Day selectedDay;
   final bool editionMode;
   final Calendar calendar;
   final bool showError;
   final TextEditingController controller;
 
-  MemoryContentWeb(
-      {required this.selectOption,
-      required this.selectedDay,
-      required this.closeOptions,
-      required this.editionMode,
-      required this.controller,
-      required this.crearNuevo,
-      required this.calendar,
-      required this.showError});
+  MemoryContentWeb({
+    required this.selectOption,
+    required this.selectedDay,
+    required this.closeOptions,
+    required this.editionMode,
+    required this.controller,
+    required this.crearNuevo,
+    required this.calendar,
+    required this.showError,
+    required this.setDay,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +38,12 @@ class MemoryContentWeb extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          DayTitle(() => selectOption(OptionName.Calendar), selectedDay.day,
-              calendar),
+          DayTitle(
+            () => selectOption(OptionName.Calendar),
+            selectedDay.day,
+            calendar,
+            setDay,
+          ),
           if (selectedDay.exist)
             ContentText(
               closeOptions: closeOptions,
